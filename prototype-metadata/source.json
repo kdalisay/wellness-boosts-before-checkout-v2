@@ -1,0 +1,26 @@
+{
+  "source": "https://www.thepetstable.com/plans-quiz",
+  "source_type": "description",
+  "platform": "web",
+  "threshold": "strict",
+  "brand": "thepetstable",
+  "scope": "flow",
+  "target": "plans-quiz",
+  "reference_screen": "https://www.thepetstable.com/plans-quiz",
+  "locale": "us",
+  "created_at": "2026-04-23T00:00:00Z",
+  "name": "wellness-boosts-before-checkout-v2",
+  "implementation_source": "~/web/app/spaces/whitelabel/modules/whitelabel-web/packages/components/plans-quiz/",
+  "quiz_flow": [
+    "NumberOfPets",
+    "NameAndSex",
+    "Goal",
+    "Age",
+    "Breed",
+    "Weight",
+    "BodyCondition",
+    "Allergens",
+    "ActivityLevel"
+  ],
+  "notes": "Strict threshold prototype with 9-step onboarding quiz for pet profile collection. Feeding plan step removed per user request. User intends to add wellness boosts upsell step in future iteration."
+}

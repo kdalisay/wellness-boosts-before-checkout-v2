@@ -3347,6 +3347,24 @@
       color: #242424;
     }
 
+    .order-item-remove {
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 12px;
+      line-height: 16px;
+      color: #656565;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: block;
+      text-align: left;
+    }
+
+    .order-item-remove:hover {
+      color: #b30000;
+    }
+
     /* Plan header tags */
     .order-plan-header {
       display: flex;
@@ -6763,37 +6781,44 @@
       checkmark: 'https://www.figma.com/api/mcp/asset/55be5fc6-e282-40e7-970d-acb3c4512582'
     };
 
-    // Generate recommendation badges based on pet profile and goal
+    // Goal-to-badge mapping
+    const goalBadgeMap = {
+      'improve-health': { text: 'Improve health', icon: 'heart' },
+      'human-grade-food': { text: 'Human-grade food', icon: 'checkmark' },
+      'affordability': { text: 'Affordability', icon: 'checkmark' },
+      'picky-eater': { text: 'Picky eater meals', icon: 'heart' },
+      'convenient-feeding': { text: 'Convenient feeding', icon: 'checkmark' },
+      'variety': { text: 'Variety of options', icon: 'sort' }
+    };
+
+    // Generate recommendation badges based on pet profile goals + activity level
     function generateRecommendationBadges() {
       const badges = [];
       const goalsArr = Array.isArray(quizState.formData.goals)
         ? quizState.formData.goals
         : (quizState.formData.goals ? [quizState.formData.goals] : []);
-      const goal = goalsArr[0];
       const activityLevel = quizState.formData.activityLevel;
 
-      // Badge for goal
-      if (goal === 'health') {
-        badges.push({
-          text: 'Improve health',
-          icon: `<img src="${wellnessBadgeIcons.heart}" alt="" />`
-        });
-      } else if (goal === 'weight') {
-        badges.push({
-          text: 'Weight management',
-          icon: `<img src="${wellnessBadgeIcons.heart}" alt="" />`
-        });
-      } else if (goal === 'variety') {
-        badges.push({
-          text: 'Variety of options',
-          icon: `<img src="${wellnessBadgeIcons.sort}" alt="" />`
-        });
-      }
+      // Add a badge for each selected goal
+      goalsArr.forEach(goal => {
+        const mapping = goalBadgeMap[goal];
+        if (mapping) {
+          badges.push({
+            text: mapping.text,
+            icon: `<img src="${wellnessBadgeIcons[mapping.icon]}" alt="" />`
+          });
+        }
+      });
 
       // Badge for activity level
       if (activityLevel === 'high') {
         badges.push({
           text: 'High activity level',
+          icon: `<img src="${wellnessBadgeIcons.checkmark}" alt="" />`
+        });
+      } else if (activityLevel === 'moderate') {
+        badges.push({
+          text: 'Moderate activity',
           icon: `<img src="${wellnessBadgeIcons.checkmark}" alt="" />`
         });
       }
@@ -7030,6 +7055,7 @@
               </div>
               <div class="order-item-info">
                 <p class="order-item-name">${boostData.name}</p>
+                <button type="button" class="order-item-remove" data-boost-id="${boostId}">Remove</button>
               </div>
               <div class="order-item-price">
                 <span class="order-item-price-regular">$${boostData.price.toFixed(2)}</span>
@@ -7039,6 +7065,17 @@
           });
         }
       }
+
+      // Wire up Remove buttons for boosts
+      boostContainer?.querySelectorAll('.order-item-remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.boostId;
+          quizState.formData.selectedBoosts = quizState.formData.selectedBoosts.filter(b => b !== id);
+          saveState();
+          // Re-render checkout to update line items + boost upsell visibility
+          showCheckout();
+        });
+      });
 
       // Update pet name placeholders in order summary
       updatePetNamePlaceholders();

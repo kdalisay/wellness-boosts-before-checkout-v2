@@ -425,11 +425,14 @@
         padding: 0;
       }
 
-      /* Recipe selection, wellness boosts, and signup screens break out of quiz-wrapper constraint */
+      /* Recipe selection, wellness boosts, signup, checkout, and payment screens break out of quiz-wrapper constraint */
       .quiz-wrapper:has(#step-recipe-selection:not(.hidden)),
       .quiz-wrapper:has(#step-wellness-boosts:not(.hidden)),
       .quiz-wrapper:has(#step-signup:not(.hidden)),
-      .quiz-wrapper:has(#step-checkout:not(.hidden)) {
+      .quiz-wrapper:has(#step-checkout:not(.hidden)),
+      .quiz-wrapper:has(#step-payment:not(.hidden)),
+      .quiz-wrapper:has(#step-loading:not(.hidden)),
+      .quiz-wrapper:has(#step-success:not(.hidden)) {
         max-width: 100%;
       }
 
@@ -3171,9 +3174,16 @@
 
     .signup-claim-banner {
       width: 100%;
-      height: auto;
       border-radius: 16px;
       display: block;
+      overflow: hidden;
+    }
+
+    .signup-claim-banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 16px;
     }
 
     .signup-form-wrapper {
@@ -3906,6 +3916,42 @@
       gap: 8px;
     }
 
+    .order-delivery-banner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #efe9de;
+      border-radius: 8px;
+      padding: 8px 16px;
+    }
+
+    .order-delivery-banner-icon {
+      flex-shrink: 0;
+    }
+
+    .order-delivery-banner-text {
+      flex: 1;
+    }
+
+    .order-delivery-banner-title {
+      font-family: var(--font-family-secondary);
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 24px;
+      color: #242424;
+      margin: 0;
+    }
+
+    .order-delivery-banner-link {
+      font-family: var(--font-family-secondary);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: #242424;
+      margin: 0;
+      cursor: pointer;
+    }
+
     /* Total section */
     .order-total-section {
       background: #f7f7f7;
@@ -4447,6 +4493,852 @@
         display: block;
       }
     }
+
+    /* ========== Payment Step ========== */
+    #step-payment.quiz-step {
+      padding-bottom: 0;
+    }
+
+    .payment-step-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .payment-back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-family: var(--font-family-secondary);
+      font-size: 14px;
+      color: #242424;
+      margin-bottom: 8px;
+    }
+
+    .payment-card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding: 24px 16px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .payment-card-heading {
+      font-family: var(--font-family-primary);
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 28px;
+      color: #242424;
+      margin: 0 0 16px;
+    }
+
+    .payment-security-msg {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .payment-security-msg svg {
+      flex-shrink: 0;
+    }
+
+    .payment-security-msg span {
+      font-family: var(--font-family-secondary);
+      font-size: 13px;
+      line-height: 18px;
+      color: #2e7d32;
+    }
+
+    .apple-pay-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      width: 100%;
+      height: 50px;
+      background: #000000;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+
+    .apple-pay-btn-text {
+      font-family: var(--font-family-secondary);
+      font-size: 16px;
+      color: #ffffff;
+    }
+
+    .apple-pay-btn svg {
+      height: 17px;
+      width: auto;
+    }
+
+    .payment-or-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .payment-or-divider hr {
+      flex: 1;
+      border: none;
+      border-top: 1px solid #e0e0e0;
+      margin: 0;
+    }
+
+    .payment-or-divider span {
+      font-family: var(--font-family-secondary);
+      font-size: 13px;
+      color: #757575;
+    }
+
+    .payment-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+
+    .payment-option.active {
+      border-color: #242424;
+    }
+
+    .payment-option-radio {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #bdbdbd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .payment-option.active .payment-option-radio {
+      border-color: #242424;
+    }
+
+    .payment-option.active .payment-option-radio::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #242424;
+    }
+
+    .payment-option-label {
+      font-family: var(--font-family-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      color: #242424;
+      flex: 1;
+    }
+
+    .payment-option-icons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .payment-option-icons img {
+      height: 24px;
+      width: auto;
+    }
+
+    .payment-fields {
+      background: #f7f7f7;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: -4px;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    .payment-option.active + .payment-fields {
+      display: block;
+    }
+
+    .payment-field-group {
+      margin-bottom: 12px;
+    }
+
+    .payment-field-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .payment-field-label {
+      font-family: var(--font-family-secondary);
+      font-size: 12px;
+      color: #757575;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .payment-field-input {
+      width: 100%;
+      height: 44px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 0 12px;
+      font-family: var(--font-family-secondary);
+      font-size: 14px;
+      background: #ffffff;
+      box-sizing: border-box;
+    }
+
+    .payment-field-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .payment-field-row .payment-field-group {
+      flex: 1;
+    }
+
+    .payment-divider {
+      border: none;
+      border-top: 1px solid #e0e0e0;
+      margin: 20px 0;
+    }
+
+    .payment-satisfaction {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .payment-satisfaction-icon {
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
+    }
+
+    .payment-satisfaction-text {
+      font-family: var(--font-family-secondary);
+      font-size: 13px;
+      line-height: 18px;
+      color: #424242;
+    }
+
+    .payment-satisfaction-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #242424;
+      margin-bottom: 2px;
+    }
+
+    /* Payment order summary reuses checkout order summary styles */
+    .payment-order-summary-wrapper {
+      width: 100%;
+    }
+
+    .payment-terms {
+      font-family: var(--font-family-secondary);
+      font-size: 12px;
+      line-height: 16px;
+      color: #757575;
+      text-align: center;
+      margin: 20px 0 12px;
+    }
+
+    .payment-terms a {
+      color: #242424;
+      text-decoration: underline;
+    }
+
+    .place-order-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 56px;
+      background: #242424;
+      color: #ffffff;
+      border: none;
+      border-radius: 16px;
+      font-family: var(--font-family-primary);
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .place-order-btn:hover {
+      opacity: 0.9;
+    }
+
+    .payment-value-props {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 24px;
+      padding: 0 8px;
+    }
+
+    .payment-value-prop {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .payment-value-prop svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .payment-value-prop-text {
+      font-family: var(--font-family-secondary);
+      font-size: 13px;
+      line-height: 18px;
+      color: #424242;
+    }
+
+    .payment-value-prop-text strong {
+      font-weight: 600;
+      color: #242424;
+    }
+
+    /* Payment desktop overrides */
+    @media (min-width: 1024px) {
+      #step-payment.quiz-step {
+        background: transparent;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+      }
+
+      .payment-step-layout {
+        display: grid;
+        grid-template-columns: 1fr 458px;
+        grid-template-rows: auto auto;
+        column-gap: 32px;
+        row-gap: 24px;
+        max-width: 1144px;
+        margin: 0 auto;
+        padding: 0;
+        align-items: start;
+      }
+
+      .payment-card {
+        grid-column: 1;
+        grid-row: 1;
+        border-radius: 16px;
+        margin: 0;
+        padding: 32px;
+        width: auto;
+        max-width: none;
+      }
+
+      .payment-card-heading {
+        font-size: 24px;
+        line-height: 32px;
+      }
+
+      .payment-order-summary-wrapper {
+        grid-column: 2;
+        grid-row: 1 / 3;
+        width: 458px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 100px;
+      }
+
+      .payment-bottom-section {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      .payment-bottom-bar {
+        display: none;
+      }
+    }
+
+    /* Loading / Preparing Dashboard step */
+    #step-loading.quiz-step {
+      background: transparent;
+      box-shadow: none;
+      border-radius: 0;
+      padding: 0;
+    }
+
+    .loading-step-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 32px 16px;
+      min-height: 70vh;
+      background: #f0f9f9;
+      border-radius: 16px;
+    }
+
+    .loading-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+      padding: 32px 16px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      max-width: 375px;
+      text-align: center;
+    }
+
+    .loading-heading {
+      font-family: var(--font-family-primary);
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 24px;
+      color: #242424;
+      margin: 0;
+    }
+
+    .loading-subtext {
+      font-family: var(--font-family-secondary);
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 24px;
+      color: #007838;
+      margin: 0;
+    }
+
+    .loading-illustration {
+      width: 224px;
+      height: 224px;
+    }
+
+    .loading-illustration img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @media (min-width: 1024px) {
+      .loading-step-container {
+        padding: 64px 16px;
+      }
+
+      .loading-card {
+        max-width: 752px;
+        padding: 64px 96px;
+        gap: 24px;
+      }
+
+      .loading-heading {
+        font-size: 24px;
+        line-height: 32px;
+      }
+
+      .loading-illustration {
+        width: 240px;
+        height: 240px;
+      }
+    }
+
+    /* =============================================
+       SUCCESS / ORDER CONFIRMATION STEP
+       ============================================= */
+    #step-success.quiz-step {
+      background: transparent;
+      box-shadow: none;
+      border-radius: 0;
+      padding: 0;
+    }
+
+    .success-step-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 24px 16px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .success-main-column {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .success-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+      padding: 24px 0;
+      position: relative;
+    }
+
+    .success-confetti {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 120px;
+      pointer-events: none;
+    }
+
+    .success-confetti-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .success-checkmark {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 8px;
+    }
+
+    .success-thank-you {
+      font-family: var(--font-family-primary);
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 28px;
+      color: #242424;
+      margin: 0;
+    }
+
+    .success-confirmed {
+      font-family: var(--font-family-primary);
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 32px;
+      color: #007838;
+      margin: 0;
+    }
+
+    .success-delivery-info {
+      font-family: var(--font-family-secondary);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: #676767;
+      margin: 8px 0 0;
+    }
+
+    .success-divider {
+      border: none;
+      border-top: 1px solid #e8e8e8;
+      margin: 16px 0;
+    }
+
+    .success-promo-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 8px 0;
+    }
+
+    .success-promo-banner {
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .success-promo-banner-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 16px;
+    }
+
+    .success-discount-banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #efe9de;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 12px 0;
+    }
+
+    .success-discount-icon {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
+
+    .success-discount-text {
+      font-family: var(--font-family-secondary);
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      color: #242424;
+      margin: 0;
+    }
+
+    .success-continue-btn {
+      width: 100%;
+      padding: 16px 24px;
+      background: #242424;
+      color: #fff;
+      font-family: var(--font-family-secondary);
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 24px;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      margin: 8px 0 16px;
+    }
+
+    .success-continue-btn:hover {
+      background: #3a3a3a;
+    }
+
+    .success-vertical-divider {
+      display: none;
+    }
+
+    .success-order-column {
+      border-top: 1px solid #e8e8e8;
+      padding-top: 24px;
+    }
+
+    .success-order-heading {
+      font-family: var(--font-family-primary);
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 28px;
+      color: #242424;
+      margin: 0 0 16px;
+    }
+
+    .success-order-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+    }
+
+    .success-order-item-thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #f5f5f5;
+    }
+
+    .success-order-item-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .success-order-item-info {
+      flex: 1;
+    }
+
+    .success-order-item-name {
+      font-family: var(--font-family-secondary);
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 20px;
+      color: #242424;
+      margin: 0;
+    }
+
+    .success-order-item-desc {
+      font-family: var(--font-family-secondary);
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 18px;
+      color: #676767;
+      margin: 2px 0 0;
+    }
+
+    .success-order-item-price {
+      font-family: var(--font-family-secondary);
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 20px;
+      color: #242424;
+      flex-shrink: 0;
+    }
+
+    .success-order-item-free {
+      font-family: var(--font-family-secondary);
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 20px;
+      color: #007838;
+      flex-shrink: 0;
+    }
+
+    .success-order-shipping {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+    }
+
+    .success-order-shipping-label {
+      font-family: var(--font-family-secondary);
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      color: #242424;
+    }
+
+    .success-order-shipping-prices {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .success-order-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0 8px;
+      border-top: 1px solid #e8e8e8;
+    }
+
+    .success-order-total-label {
+      font-family: var(--font-family-secondary);
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 24px;
+      color: #242424;
+    }
+
+    .success-order-total-prices {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .success-order-total-badge {
+      background: #007838;
+      color: #fff;
+      font-family: var(--font-family-secondary);
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 16px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .success-order-total-original {
+      font-family: var(--font-family-secondary);
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      color: #676767;
+      text-decoration: line-through;
+    }
+
+    .success-order-total-value {
+      font-family: var(--font-family-secondary);
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 24px;
+      color: #242424;
+    }
+
+    .success-info-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: #f7f7f7;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 16px;
+    }
+
+    .success-info-banner svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .success-info-text {
+      font-family: var(--font-family-secondary);
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 18px;
+      color: #676767;
+      margin: 0;
+    }
+
+    /* Desktop layout for success step */
+    @media (min-width: 1024px) {
+      .success-step-layout {
+        flex-direction: row;
+        gap: 0;
+        padding: 40px;
+        max-width: 1120px;
+        margin: 0 auto;
+      }
+
+      .success-main-column {
+        flex: 1;
+        padding-right: 40px;
+      }
+
+      .success-vertical-divider {
+        display: block;
+        width: 1px;
+        background: #e8e8e8;
+        align-self: stretch;
+      }
+
+      .success-order-column {
+        width: 371px;
+        flex-shrink: 0;
+        padding-left: 40px;
+        padding-top: 0;
+        border-top: none;
+      }
+
+      .success-promo-section {
+        flex-direction: row;
+        gap: 16px;
+      }
+
+      .success-promo-banner {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .success-header {
+        padding: 32px 0;
+      }
+
+      .success-confetti {
+        width: 300px;
+        height: 160px;
+      }
+
+      .success-thank-you {
+        font-size: 24px;
+        line-height: 32px;
+      }
+
+      .success-confirmed {
+        font-size: 28px;
+        line-height: 36px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -4520,28 +5412,28 @@
       <div class="header-progress-desktop">
         <div class="progress-step active">
           <div class="progress-step-icon">
-            <img src="https://www.figma.com/api/mcp/asset/d689c58e-737e-4731-bfb7-230bfd3d6218" alt="">
+            <img src="https://www.figma.com/api/mcp/asset/2fbde53d-03f9-4918-913c-e5889f55d305" alt="">
           </div>
           <span class="progress-label">Your pup</span>
         </div>
         <div class="progress-separator"></div>
         <div class="progress-step inactive">
           <div class="progress-step-icon">
-            <img src="https://www.figma.com/api/mcp/asset/5ed09f00-0b47-4b5f-b81d-0197831c5246" alt="">
+            <img src="https://www.figma.com/api/mcp/asset/cd8f8650-6f91-4224-b890-6cd0ee736d66" alt="">
           </div>
           <span class="progress-label">Plans</span>
         </div>
         <div class="progress-separator"></div>
         <div class="progress-step inactive">
           <div class="progress-step-icon">
-            <img src="https://www.figma.com/api/mcp/asset/ba6823e8-ec07-4b08-98bd-b94a08cf1ab2" alt="">
+            <img src="https://www.figma.com/api/mcp/asset/3528d1c9-b787-4005-9156-be65ee19746c" alt="">
           </div>
           <span class="progress-label">Recipes</span>
         </div>
         <div class="progress-separator"></div>
         <div class="progress-step inactive">
           <div class="progress-step-icon">
-            <img src="https://www.figma.com/api/mcp/asset/5e3de80b-3687-462b-a533-2866336ba3e7" alt="">
+            <img src="https://www.figma.com/api/mcp/asset/f4ea3f9b-3645-4aea-8fb7-6a33de80c0ae" alt="">
           </div>
           <span class="progress-label">Order</span>
         </div>
@@ -4626,23 +5518,23 @@
           <div class="radio-size-card">
             <input type="checkbox" name="goal" value="human-grade-food" id="goal-human-grade">
             <label for="goal-human-grade" class="radio-size-card-content">
-              <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/744a2602-4bf2-4e07-9b15-4afa50a60367" alt="Human-grade food"></div>
+              <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/35728713-6b5a-4bb4-b130-481fbf7c338d" alt="Human-grade food"></div>
               <div class="radio-size-card-text">
                 <div class="text-bold">Human-grade food</div>
               </div>
             </label>
-            <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/f6d4f432-58dd-40c8-9447-941b3f4cf460" alt="">
           </div>
 
           <div class="radio-size-card">
             <input type="checkbox" name="goal" value="improve-health" id="goal-health">
             <label for="goal-health" class="radio-size-card-content">
-              <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/2d111d04-670f-42be-b274-a90e51ac46ac" alt="Improve health"></div>
+              <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/0bb79f58-17af-4203-aaef-f90bf8373495" alt="Improve health"></div>
               <div class="radio-size-card-text">
                 <div class="text-bold">Improve health</div>
               </div>
             </label>
-            <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/f6d4f432-58dd-40c8-9447-941b3f4cf460" alt="">
           </div>
 
           <!-- Option B: Health chips (scrollable row, hidden by default) -->
@@ -4671,45 +5563,45 @@
           <div class="radio-size-card">
             <input type="checkbox" name="goal" value="affordability" id="goal-affordability">
             <label for="goal-affordability" class="radio-size-card-content">
-              <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/4059d955-c043-4d67-bc10-378799e0fb46" alt="Affordability"></div>
+              <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/b01786e5-8927-4375-bb64-5d041d47dd61" alt="Affordability"></div>
               <div class="radio-size-card-text">
                 <div class="text-bold">Affordability</div>
               </div>
             </label>
-            <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/f6d4f432-58dd-40c8-9447-941b3f4cf460" alt="">
           </div>
 
           <div class="radio-size-card">
             <input type="checkbox" name="goal" value="picky-eater" id="goal-picky">
             <label for="goal-picky" class="radio-size-card-content">
-              <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/6319d322-a5cb-4ab9-a935-8840ca9817bc" alt="Picky eater meals"></div>
+              <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/41c45a27-7fb5-444e-a7c1-3708d8c2dedf" alt="Picky eater meals"></div>
               <div class="radio-size-card-text">
                 <div class="text-bold">Picky eater meals</div>
               </div>
             </label>
-            <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/f6d4f432-58dd-40c8-9447-941b3f4cf460" alt="">
           </div>
 
           <div class="radio-size-card">
             <input type="checkbox" name="goal" value="convenient-feeding" id="goal-convenient">
             <label for="goal-convenient" class="radio-size-card-content">
-              <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/30eca42a-0527-4e9b-a4c7-eaa0c8dff38b" alt="Convenient feeding"></div>
+              <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/9029af8a-1d47-49c5-b260-0635967315bc" alt="Convenient feeding"></div>
               <div class="radio-size-card-text">
                 <div class="text-bold">Convenient feeding</div>
               </div>
             </label>
-            <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/f6d4f432-58dd-40c8-9447-941b3f4cf460" alt="">
           </div>
 
           <div class="radio-size-card">
             <input type="checkbox" name="goal" value="variety" id="goal-variety">
             <label for="goal-variety" class="radio-size-card-content">
-              <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/7f4be807-5084-47db-9a33-5f831a7d0902" alt="Variety of options"></div>
+              <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/be388043-95f2-4b46-97d0-459103782ae3" alt="Variety of options"></div>
               <div class="radio-size-card-text">
                 <div class="text-bold">Variety of options</div>
               </div>
             </label>
-            <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/f6d4f432-58dd-40c8-9447-941b3f4cf460" alt="">
           </div>
 
           <span class="error-message hidden" id="error-goal">Please select at least one goal</span>
@@ -4725,37 +5617,37 @@
             <div class="radio-size-card">
               <input type="checkbox" name="healthConcern" value="dental" id="health-dental">
               <label for="health-dental" class="radio-size-card-content">
-                <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/744a2602-4bf2-4e07-9b15-4afa50a60367" alt="Dental & oral health"></div>
+                <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/0bb79f58-17af-4203-aaef-f90bf8373495" alt="Dental & oral health"></div>
                 <div class="radio-size-card-text"><div class="text-bold">Dental & oral health</div></div>
               </label>
-              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/f6d4f432-58dd-40c8-9447-941b3f4cf460" alt="">
             </div>
 
             <div class="radio-size-card">
               <input type="checkbox" name="healthConcern" value="joint" id="health-joint">
               <label for="health-joint" class="radio-size-card-content">
-                <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/2d111d04-670f-42be-b274-a90e51ac46ac" alt="Hip & joint support"></div>
+                <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/9029af8a-1d47-49c5-b260-0635967315bc" alt="Hip & joint support"></div>
                 <div class="radio-size-card-text"><div class="text-bold">Hip & joint support</div></div>
               </label>
-              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/f6d4f432-58dd-40c8-9447-941b3f4cf460" alt="">
             </div>
 
             <div class="radio-size-card">
               <input type="checkbox" name="healthConcern" value="digestive" id="health-digestive">
               <label for="health-digestive" class="radio-size-card-content">
-                <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/30eca42a-0527-4e9b-a4c7-eaa0c8dff38b" alt="Digestive & gut health"></div>
+                <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/35728713-6b5a-4bb4-b130-481fbf7c338d" alt="Digestive & gut health"></div>
                 <div class="radio-size-card-text"><div class="text-bold">Digestive & gut health</div></div>
               </label>
-              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/f6d4f432-58dd-40c8-9447-941b3f4cf460" alt="">
             </div>
 
             <div class="radio-size-card">
               <input type="checkbox" name="healthConcern" value="immunity" id="health-immunity">
               <label for="health-immunity" class="radio-size-card-content">
-                <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/6319d322-a5cb-4ab9-a935-8840ca9817bc" alt="Overall wellness & immunity"></div>
+                <div class="radio-size-card-icon"><img src="https://www.figma.com/api/mcp/asset/be388043-95f2-4b46-97d0-459103782ae3" alt="Overall wellness & immunity"></div>
                 <div class="radio-size-card-text"><div class="text-bold">Overall wellness & immunity</div></div>
               </label>
-              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/f6d4f432-58dd-40c8-9447-941b3f4cf460" alt="">
             </div>
 
             <span class="error-message hidden" id="error-health-concerns">Please select at least one health area</span>
@@ -4893,7 +5785,7 @@
                       <div class="size-card-caption">For example: Chihuahua, Maltese</div>
                     </div>
                     <div class="size-card-illustration">
-                      <img src="https://www.figma.com/api/mcp/asset/c883a236-e91d-4bac-ad92-79abd6288b0d" alt="Toy size dog">
+                      <img src="https://www.figma.com/api/mcp/asset/c67b9628-107c-41cd-93ab-11de0c76dcac" alt="Toy size dog">
                     </div>
                   </div>
                 </label>
@@ -4908,7 +5800,7 @@
                       <div class="size-card-caption">For example: Dachshund, Boston Terrier</div>
                     </div>
                     <div class="size-card-illustration">
-                      <img src="https://www.figma.com/api/mcp/asset/30c913cc-7f6f-4b87-ae94-d6e5a247ee98" alt="Small size dog">
+                      <img src="https://www.figma.com/api/mcp/asset/a0374c5f-31e0-4872-9e3f-c428d35006ac" alt="Small size dog">
                     </div>
                   </div>
                 </label>
@@ -4923,7 +5815,7 @@
                       <div class="size-card-caption">For example: Basset Hound, Beagle</div>
                     </div>
                     <div class="size-card-illustration">
-                      <img src="https://www.figma.com/api/mcp/asset/9d285b3e-e1ba-4f5a-a5bb-6b4bd27eec0e" alt="Medium size dog">
+                      <img src="https://www.figma.com/api/mcp/asset/e1991df5-42fc-4cec-9e17-33f0362fa76b" alt="Medium size dog">
                     </div>
                   </div>
                 </label>
@@ -4938,7 +5830,7 @@
                       <div class="size-card-caption">For example: German Shepherd, Golden Retriever</div>
                     </div>
                     <div class="size-card-illustration">
-                      <img src="https://www.figma.com/api/mcp/asset/3c06e614-e102-479d-b021-02555917bd9d" alt="Large size dog">
+                      <img src="https://www.figma.com/api/mcp/asset/ef57f118-f1d2-42a4-ba8b-35c563757e13" alt="Large size dog">
                     </div>
                   </div>
                 </label>
@@ -4984,7 +5876,7 @@
                     <div class="size-card-desc">Ribs are always visible and easily felt, or you don't feel any soft tissue over the bones.</div>
                   </div>
                   <div class="size-card-illustration">
-                    <img src="https://www.figma.com/api/mcp/asset/3d4a7a4c-419a-4531-9816-b1f9544c3ffc" alt="Underweight dog">
+                    <img src="https://www.figma.com/api/mcp/asset/39eb410a-a300-405d-acb6-8e0cbe0f67ba" alt="Underweight dog">
                   </div>
                 </div>
               </label>
@@ -4999,7 +5891,7 @@
                     <div class="size-card-desc">A slight layer of fat covers the ribs, but each bone still feels distinct.</div>
                   </div>
                   <div class="size-card-illustration">
-                    <img src="https://www.figma.com/api/mcp/asset/77c9a8b0-84ea-43fd-af3d-223169c26b19" alt="Ideal weight dog">
+                    <img src="https://www.figma.com/api/mcp/asset/5010d112-67b8-4124-b611-b9b8187ec53a" alt="Ideal weight dog">
                   </div>
                 </div>
               </label>
@@ -5014,7 +5906,7 @@
                     <div class="size-card-desc">Ribs can barely be felt or not at all.</div>
                   </div>
                   <div class="size-card-illustration">
-                    <img src="https://www.figma.com/api/mcp/asset/2d947cc5-0d35-43c4-8776-c09fbad00976" alt="Overweight dog">
+                    <img src="https://www.figma.com/api/mcp/asset/33174602-532f-4041-858c-2133c4255634" alt="Overweight dog">
                   </div>
                 </div>
               </label>
@@ -5105,7 +5997,7 @@
                     <div class="size-card-desc">We're couch buddies who love staying cozy indoors.</div>
                     <div class="size-card-caption">Walked once a day.</div>
                   </div>
-                  <img src="https://www.figma.com/api/mcp/asset/309bc024-42da-4a0b-8929-0afd04db9f5c" alt="Sleeping dog" class="size-card-illustration">
+                  <img src="https://www.figma.com/api/mcp/asset/8603b100-9ab9-46f8-8540-faba2dcd3ec7" alt="Sleeping dog" class="size-card-illustration">
                 </div>
               </label>
             </div>
@@ -5119,7 +6011,7 @@
                     <div class="size-card-desc">We're always up for playtime, zoomies, or a nice long walk.</div>
                     <div class="size-card-caption">Walked twice or more a day.</div>
                   </div>
-                  <img src="https://www.figma.com/api/mcp/asset/d55d2b52-841a-4a92-be29-f369b4c44326" alt="Active dog" class="size-card-illustration">
+                  <img src="https://www.figma.com/api/mcp/asset/967964bf-e57d-4d29-848a-09cb30c9a622" alt="Active dog" class="size-card-illustration">
                 </div>
               </label>
             </div>
@@ -5133,7 +6025,7 @@
                     <div class="size-card-desc">We thrive on staying active and we live for adventure.</div>
                     <div class="size-card-caption">A constant runner and full of pep.</div>
                   </div>
-                  <img src="https://www.figma.com/api/mcp/asset/d55d2b52-841a-4a92-be29-f369b4c44326" alt="Very active dog" class="size-card-illustration" style="transform: scaleX(-1);">
+                  <img src="https://www.figma.com/api/mcp/asset/967964bf-e57d-4d29-848a-09cb30c9a622" alt="Very active dog" class="size-card-illustration" style="transform: scaleX(-1);">
                 </div>
               </label>
             </div>
@@ -5157,8 +6049,8 @@
         <!-- Dr. Sarah Section -->
         <div class="dr-sarah-section">
           <div class="dr-sarah-image-wrapper">
-            <img src="https://www.figma.com/api/mcp/asset/fa4cb53f-e332-41d0-ad48-3924d3772c0d" alt="Dr. Sarah Wilson with dog" class="dr-sarah-photo" />
-            <div class="arrow-indicator"><img src="https://www.figma.com/api/mcp/asset/50adeb38-6858-4e4e-b8bc-c708a7a3794a" alt="arrow" /></div>
+            <img src="https://www.figma.com/api/mcp/asset/23ffc7b5-1e43-44d9-b92d-c7c02e1233e9" alt="Dr. Sarah Wilson with dog" class="dr-sarah-photo" />
+            <div class="arrow-indicator"><img src="https://www.figma.com/api/mcp/asset/9dc1e522-1a5e-4e26-8d8b-084fb28e6bf0" alt="arrow" /></div>
           </div>
           <div class="dr-sarah-card">
             <div class="dr-sarah-name">Dr. Sarah Wilson</div>
@@ -5212,7 +6104,7 @@
               <div class="plan-card-content">
                 <!-- Image Container -->
                 <div class="plan-image-container">
-                  <img src="https://www.figma.com/api/mcp/asset/394f44ff-42db-44e9-b234-98277e60b1eb" alt="Air-Dried Plan" class="plan-image">
+                  <img src="https://www.figma.com/api/mcp/asset/95a9ebbc-1ebe-459c-b5b1-a2cdc6cfef00" alt="Air-Dried Plan" class="plan-image">
                 </div>
 
                 <!-- Text Content -->
@@ -5281,7 +6173,7 @@
             <div class="plan-card-content">
               <!-- Image Container -->
               <div class="plan-image-container">
-                <img src="https://www.figma.com/api/mcp/asset/eb57f59d-1670-4c35-b5f5-ec0c0789c9f0" alt="Fresh Plan" class="plan-image">
+                <img src="https://www.figma.com/api/mcp/asset/d913ba59-c9c3-42e7-a667-0ea9ef04b5ec" alt="Fresh Plan" class="plan-image">
               </div>
 
               <!-- Text Content -->
@@ -5348,7 +6240,7 @@
             <div class="plan-card-content">
               <!-- Image Container -->
               <div class="plan-image-container">
-                <img src="https://www.figma.com/api/mcp/asset/828f926b-9b54-454d-84ae-706da6f7662f" alt="Mixed Plan" class="plan-image">
+                <img src="https://www.figma.com/api/mcp/asset/445e7bb7-b6cb-458b-a9d4-a0a7258cd228" alt="Mixed Plan" class="plan-image">
               </div>
 
               <!-- Text Content -->
@@ -5556,7 +6448,9 @@
 
           <div class="signup-container">
             <!-- Banner -->
-            <img class="signup-claim-banner" src="https://www.figma.com/api/mcp/asset/7df16b5e-7b03-4b7c-a770-8e7c20545d4f" alt="Better health after just 2 orders. According to our recent survey, 79% of customers see better dog health." />
+            <div class="signup-claim-banner">
+              <img src="https://www.figma.com/api/mcp/asset/c6a6e5bb-6299-4f11-8474-ba82afbde870" alt="Better health after just 2 orders. According to our recent survey, 79% of customers see better dog health." />
+            </div>
 
             <!-- Form -->
             <div class="signup-form-wrapper">
@@ -5580,17 +6474,17 @@
           <h3 class="signup-stats-heading">What our customers also report</h3>
           <div class="signup-stat-cards">
             <div class="signup-stat-card">
-              <img class="signup-stat-icon" src="https://www.figma.com/api/mcp/asset/f3c5fd80-152d-4e71-8340-d17eb9631a3b" alt="heart" />
+              <img class="signup-stat-icon" src="https://www.figma.com/api/mcp/asset/2e822a10-0d81-4868-9a56-85b90d66e78c" alt="heart" />
               <div class="signup-stat-value">76%</div>
               <div class="signup-stat-label">feel like better pet parents</div>
             </div>
             <div class="signup-stat-card">
-              <img class="signup-stat-icon" src="https://www.figma.com/api/mcp/asset/557c358e-fbe4-4c2b-a8e9-59fa1492f21d" alt="thumbs up" />
+              <img class="signup-stat-icon" src="https://www.figma.com/api/mcp/asset/ba5751f6-d332-4f1e-9997-57c87dbcfe03" alt="thumbs up" />
               <div class="signup-stat-value">85%</div>
               <div class="signup-stat-label">say transition was seamless</div>
             </div>
             <div class="signup-stat-card">
-              <img class="signup-stat-icon" src="https://www.figma.com/api/mcp/asset/863bbe8f-6e9e-45ae-948e-0d056f0848a6" alt="confetti" />
+              <img class="signup-stat-icon" src="https://www.figma.com/api/mcp/asset/027e80c0-d4de-489c-91a3-5ddf47b08fcc" alt="confetti" />
               <div class="signup-stat-value">50%</div>
               <div class="signup-stat-label">improved stools &amp; digestion</div>
             </div>
@@ -5602,7 +6496,7 @@
           <div class="signup-testimonials-track">
             <div class="signup-testimonial-card">
               <div class="signup-testimonial-profile">
-                <img class="signup-testimonial-avatar" src="https://www.figma.com/api/mcp/asset/fc20b32b-504a-4dad-93d1-058f6c40df06" alt="Kath" />
+                <img class="signup-testimonial-avatar" src="https://www.figma.com/api/mcp/asset/8ba6217f-1417-46c7-b758-f74fc095b0e9" alt="Kath" />
                 <div class="signup-testimonial-bio">
                   <p class="signup-testimonial-name">Kath &amp; Zelda 🐶</p>
                   <p class="signup-testimonial-date">Apr 24</p>
@@ -5620,7 +6514,7 @@
 
             <div class="signup-testimonial-card">
               <div class="signup-testimonial-profile">
-                <img class="signup-testimonial-avatar" src="https://www.figma.com/api/mcp/asset/344dec9d-0e7b-43e8-8993-3ed2ef1d1765" alt="Rob" />
+                <img class="signup-testimonial-avatar" src="https://www.figma.com/api/mcp/asset/45bb782f-86c4-410d-8a0d-58621f4f6fdc" alt="Rob" />
                 <div class="signup-testimonial-bio">
                   <p class="signup-testimonial-name">Rob &amp; Luigi 🐶</p>
                   <p class="signup-testimonial-date">May 2</p>
@@ -5751,10 +6645,24 @@
 
                 <hr class="order-divider" />
 
+                <!-- Delivery info banner -->
+                <div class="order-delivery-banner">
+                  <svg class="order-delivery-banner-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M16.474 5.408l2.118 2.117m-.756-3.982L12.109 9.27a2.118 2.118 0 0 0-.58 1.082l-.427 2.14 2.14-.428a2.118 2.118 0 0 0 1.082-.58l5.727-5.727a1.853 1.853 0 1 0-2.621-2.621z" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M19 15v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <div class="order-delivery-banner-text">
+                    <p class="order-delivery-banner-title">Delivering on Friday, February 27</p>
+                    <p class="order-delivery-banner-link">Add delivery instructions</p>
+                  </div>
+                </div>
+
+                <hr class="order-divider" />
+
                 <!-- Trial box -->
                 <div class="order-line-item">
                   <div class="order-item-thumb">
-                    <img src="https://www.figma.com/api/mcp/asset/c403c174-5c35-4b9e-b8f2-9c93a55dbc6b" alt="Trial box" />
+                    <img src="https://www.figma.com/api/mcp/asset/6178acee-b9ea-4328-9d6c-066e4be8ec7e" alt="Trial box" />
                   </div>
                   <div class="order-item-info">
                     <p class="order-item-name">2-Week Trial Box for <span class="pet-name-placeholder">your pup</span></p>
@@ -5773,15 +6681,15 @@
                 <!-- Recipes list (expandable) -->
                 <div class="order-recipes-list" id="recipes-list">
                   <div class="order-recipe-item">
-                    <div class="order-recipe-thumb"><img src="https://www.figma.com/api/mcp/asset/d6ae6567-799a-4e71-a827-bf7897142971" alt="Recipe 1" /></div>
+                    <div class="order-recipe-thumb"><img src="https://www.figma.com/api/mcp/asset/eb27d296-5a0a-42d9-8731-0632c4b275f9" alt="Recipe 1" /></div>
                     <span class="order-recipe-name">Chicken, Brown Rice &amp; Carrots</span>
                   </div>
                   <div class="order-recipe-item">
-                    <div class="order-recipe-thumb"><img src="https://www.figma.com/api/mcp/asset/74e026b0-c3dc-4346-ad6f-bc09855c7088" alt="Recipe 2" /></div>
+                    <div class="order-recipe-thumb"><img src="https://www.figma.com/api/mcp/asset/e6cc9991-ddf3-41f6-a27f-534a44891f0b" alt="Recipe 2" /></div>
                     <span class="order-recipe-name">Turkey, Whole Wheat Pasta &amp; Spinach</span>
                   </div>
                   <div class="order-recipe-item">
-                    <div class="order-recipe-thumb"><img src="https://www.figma.com/api/mcp/asset/4519d2ba-7104-4267-ba7f-008d4f5b16fa" alt="Recipe 3" /></div>
+                    <div class="order-recipe-thumb"><img src="https://www.figma.com/api/mcp/asset/78a1f08a-479d-419d-8828-b9d60c1bcc31" alt="Recipe 3" /></div>
                     <span class="order-recipe-name">Beef, Potatoes &amp; Green Beans</span>
                   </div>
                 </div>
@@ -5791,7 +6699,7 @@
                 <!-- Welcome Kit -->
                 <div class="order-line-item">
                   <div class="order-item-thumb">
-                    <img src="https://www.figma.com/api/mcp/asset/bf32db5b-7c0a-4edf-9582-7ce328eda8d1" alt="Welcome Kit" />
+                    <img src="https://www.figma.com/api/mcp/asset/a8355322-c9e2-4867-b0ba-9eea9b85502e" alt="Welcome Kit" />
                   </div>
                   <div class="order-item-info">
                     <p class="order-item-name">Welcome Kit</p>
@@ -5806,7 +6714,7 @@
                 <!-- Sample Pack -->
                 <div class="order-line-item">
                   <div class="order-item-thumb">
-                    <img src="https://www.figma.com/api/mcp/asset/781017d6-a1d7-4878-908b-2ba6bd183f59" alt="Sample Pack" />
+                    <img src="https://www.figma.com/api/mcp/asset/fd278636-7563-4475-a919-17d604345021" alt="Sample Pack" />
                   </div>
                   <div class="order-item-info">
                     <p class="order-item-name">4oz Air-Dried Sample Pack</p>
@@ -5833,9 +6741,9 @@
                   <div class="wellness-boost-content" id="wellness-boost-content">
                     <div class="wellness-boost-cards-wrapper" id="wellness-boost-carousel">
                       <div class="wellness-boost-cards">
-                        <div class="wellness-boost-card" data-boost-name="Dental Sticks" data-boost-price="19.99" data-boost-image="https://www.figma.com/api/mcp/asset/65c81605-2575-478c-8df5-176084518acf">
+                        <div class="wellness-boost-card" data-boost-name="Dental Sticks" data-boost-price="19.99" data-boost-image="https://www.figma.com/api/mcp/asset/ecb9699e-65e2-43fa-b3bd-dae18f44e347">
                           <div class="wellness-boost-card-image" style="background-color: #caf2cd;">
-                            <img src="https://www.figma.com/api/mcp/asset/65c81605-2575-478c-8df5-176084518acf" alt="Dental Sticks" />
+                            <img src="https://www.figma.com/api/mcp/asset/ecb9699e-65e2-43fa-b3bd-dae18f44e347" alt="Dental Sticks" />
                             <button type="button" class="wellness-boost-card-add" aria-label="Add Dental Sticks">
                               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
@@ -5843,19 +6751,19 @@
                           <p class="wellness-boost-card-name">Dental Sticks</p>
                           <p class="wellness-boost-card-price">$19.99</p>
                         </div>
-                        <div class="wellness-boost-card" data-boost-name="Happy Bites Chicken Dog Treats" data-boost-price="9.99" data-boost-image="https://www.figma.com/api/mcp/asset/11ac6a96-2b5f-4280-a647-195947de898b">
+                        <div class="wellness-boost-card" data-boost-name="Chicken Lite Bites Dog Treats" data-boost-price="9.99" data-boost-image="https://www.figma.com/api/mcp/asset/9ef6abc0-3dc9-4d06-9dd9-8e90d8a7cbd2">
                           <div class="wellness-boost-card-image" style="background-color: #edebab;">
-                            <img src="https://www.figma.com/api/mcp/asset/11ac6a96-2b5f-4280-a647-195947de898b" alt="Happy Bites Chicken Dog Treats" />
-                            <button type="button" class="wellness-boost-card-add" aria-label="Add Happy Bites">
+                            <img src="https://www.figma.com/api/mcp/asset/9ef6abc0-3dc9-4d06-9dd9-8e90d8a7cbd2" alt="Chicken Lite Bites Dog Treats" />
+                            <button type="button" class="wellness-boost-card-add" aria-label="Add Chicken Lite Bites">
                               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
                           </div>
-                          <p class="wellness-boost-card-name">Happy Bites Chicken Dog Treats</p>
+                          <p class="wellness-boost-card-name">Chicken Lite Bites Dog Treats</p>
                           <p class="wellness-boost-card-price">$9.99</p>
                         </div>
-                        <div class="wellness-boost-card" data-boost-name="Probiotic Soft Chews" data-boost-price="23.50" data-boost-image="https://www.figma.com/api/mcp/asset/ae6f7039-e061-49be-804b-582389fef1d4">
+                        <div class="wellness-boost-card" data-boost-name="Probiotic Soft Chews" data-boost-price="23.50" data-boost-image="https://www.figma.com/api/mcp/asset/ba2876da-b8a5-4e26-bb43-958cb1c43dea">
                           <div class="wellness-boost-card-image" style="background-color: #caf2cd;">
-                            <img src="https://www.figma.com/api/mcp/asset/ae6f7039-e061-49be-804b-582389fef1d4" alt="Probiotic Soft Chews" />
+                            <img src="https://www.figma.com/api/mcp/asset/ba2876da-b8a5-4e26-bb43-958cb1c43dea" alt="Probiotic Soft Chews" />
                             <button type="button" class="wellness-boost-card-add" aria-label="Add Probiotic Soft Chews">
                               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
@@ -5863,9 +6771,9 @@
                           <p class="wellness-boost-card-name">Probiotic Soft Chews</p>
                           <p class="wellness-boost-card-price">$23.50</p>
                         </div>
-                        <div class="wellness-boost-card" data-boost-name="Snack Sticks Lamb Dog Treats" data-boost-price="13.99" data-boost-image="https://www.figma.com/api/mcp/asset/af7276dd-bbea-4de9-92c9-4ca11a6469aa">
+                        <div class="wellness-boost-card" data-boost-name="Snack Sticks Lamb Dog Treats" data-boost-price="13.99" data-boost-image="https://www.figma.com/api/mcp/asset/5ada325d-9605-4896-b34e-b6a7fadcd578">
                           <div class="wellness-boost-card-image" style="background-color: #f3c1de;">
-                            <img src="https://www.figma.com/api/mcp/asset/af7276dd-bbea-4de9-92c9-4ca11a6469aa" alt="Snack Sticks Lamb Dog Treats" />
+                            <img src="https://www.figma.com/api/mcp/asset/5ada325d-9605-4896-b34e-b6a7fadcd578" alt="Snack Sticks Lamb Dog Treats" />
                             <button type="button" class="wellness-boost-card-add" aria-label="Add Snack Sticks">
                               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
@@ -5873,9 +6781,9 @@
                           <p class="wellness-boost-card-name">Snack Sticks Lamb Dog Treats</p>
                           <p class="wellness-boost-card-price">$13.99</p>
                         </div>
-                        <div class="wellness-boost-card" data-boost-name="Belly Bites Beef Dog Treats" data-boost-price="9.99" data-boost-image="https://www.figma.com/api/mcp/asset/7d93afa5-203c-4989-9eac-2db7ee0a3789">
+                        <div class="wellness-boost-card" data-boost-name="Belly Bites Beef Dog Treats" data-boost-price="9.99" data-boost-image="https://www.figma.com/api/mcp/asset/c53e3025-d9d5-4e12-86e4-2a97ae7a8101">
                           <div class="wellness-boost-card-image" style="background-color: #f3c1de;">
-                            <img src="https://www.figma.com/api/mcp/asset/7d93afa5-203c-4989-9eac-2db7ee0a3789" alt="Belly Bites Beef Dog Treats" />
+                            <img src="https://www.figma.com/api/mcp/asset/c53e3025-d9d5-4e12-86e4-2a97ae7a8101" alt="Belly Bites Beef Dog Treats" />
                             <button type="button" class="wellness-boost-card-add" aria-label="Add Belly Bites">
                               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
@@ -5883,9 +6791,9 @@
                           <p class="wellness-boost-card-name">Belly Bites Beef Dog Treats</p>
                           <p class="wellness-boost-card-price">$9.99</p>
                         </div>
-                        <div class="wellness-boost-card" data-boost-name="Hip &amp; Joint Soft Chews" data-boost-price="25.00" data-boost-image="https://www.figma.com/api/mcp/asset/f3d1d9ed-380a-4f1d-9e2a-c323bba9eb02">
+                        <div class="wellness-boost-card" data-boost-name="Hip &amp; Joint Soft Chews" data-boost-price="25.00" data-boost-image="https://www.figma.com/api/mcp/asset/e5c2df9e-9425-42f1-9df2-70e20f3dea04">
                           <div class="wellness-boost-card-image" style="background-color: #f3c1de;">
-                            <img src="https://www.figma.com/api/mcp/asset/f3d1d9ed-380a-4f1d-9e2a-c323bba9eb02" alt="Hip &amp; Joint Soft Chews" />
+                            <img src="https://www.figma.com/api/mcp/asset/e5c2df9e-9425-42f1-9df2-70e20f3dea04" alt="Hip &amp; Joint Soft Chews" />
                             <button type="button" class="wellness-boost-card-add" aria-label="Add Hip &amp; Joint Soft Chews">
                               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
@@ -5893,9 +6801,9 @@
                           <p class="wellness-boost-card-name">Hip &amp; Joint Soft Chews</p>
                           <p class="wellness-boost-card-price">$25.00</p>
                         </div>
-                        <div class="wellness-boost-card" data-boost-name="8-in-1 Wellness Soft Chews" data-boost-price="22.00" data-boost-image="https://www.figma.com/api/mcp/asset/95155420-f012-4774-b88e-a62c6606267d">
+                        <div class="wellness-boost-card" data-boost-name="8-in-1 Wellness Soft Chews" data-boost-price="22.00" data-boost-image="https://www.figma.com/api/mcp/asset/f0566316-aec8-4c70-a764-9eec96f51418">
                           <div class="wellness-boost-card-image" style="background-color: #f3c1de;">
-                            <img src="https://www.figma.com/api/mcp/asset/95155420-f012-4774-b88e-a62c6606267d" alt="8-in-1 Wellness Soft Chews" />
+                            <img src="https://www.figma.com/api/mcp/asset/f0566316-aec8-4c70-a764-9eec96f51418" alt="8-in-1 Wellness Soft Chews" />
                             <button type="button" class="wellness-boost-card-add" aria-label="Add 8-in-1 Wellness Soft Chews">
                               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             </button>
@@ -5953,8 +6861,8 @@
 
         <!-- Social proof -->
         <div class="checkout-social-proof">
-          <img class="checkout-social-proof-mobile" src="https://www.figma.com/api/mcp/asset/a35dcd95-7444-4e4b-bed1-c9454ee7e4ef" alt="Social proofing - over 3 million meals delivered, recommended by 90% of pet parents on Trustpilot, try us risk-free with a money-back guarantee" />
-          <img class="checkout-social-proof-desktop" src="https://www.figma.com/api/mcp/asset/868e3f46-6c51-4ab2-9ce4-351bbbabefeb" alt="Social proofing - over 3 million meals delivered, recommended by 90% of pet parents on Trustpilot, try us risk-free with a money-back guarantee" />
+          <img class="checkout-social-proof-mobile" src="https://www.figma.com/api/mcp/asset/f3c5348c-8cd7-4552-915f-25287b81dcbd" alt="Social proofing - over 3 million meals delivered, recommended by 90% of pet parents on Trustpilot, try us risk-free with a money-back guarantee" />
+          <img class="checkout-social-proof-desktop" src="https://www.figma.com/api/mcp/asset/f3c5348c-8cd7-4552-915f-25287b81dcbd" alt="Social proofing - over 3 million meals delivered, recommended by 90% of pet parents on Trustpilot, try us risk-free with a money-back guarantee" />
         </div>
 
         <!-- Sticky bottom bar (mobile) -->
@@ -5964,6 +6872,396 @@
           <button type="submit" form="checkout-form" class="checkout-continue-btn">Continue</button>
         </div>
 
+      </div>
+
+      <!-- ========== Payment Step ========== -->
+      <div class="quiz-step hidden" id="step-payment" data-step="payment">
+        <div class="payment-step-layout">
+
+          <!-- Payment Method Card (left on desktop) -->
+          <div class="payment-card">
+            <button type="button" class="payment-back-btn" id="payment-back-btn">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12.5 15L7.5 10L12.5 5" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Back
+            </button>
+
+            <h2 class="payment-card-heading">Payment Method</h2>
+
+            <!-- Security message -->
+            <div class="payment-security-msg">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12.667 7.333H3.333C2.597 7.333 2 7.93 2 8.667v4.666C2 14.07 2.597 14.667 3.333 14.667h9.334c.736 0 1.333-.597 1.333-1.334V8.667c0-.737-.597-1.334-1.333-1.334z" stroke="#2e7d32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.667 7.333V4.667a3.333 3.333 0 1 1 6.666 0v2.666" stroke="#2e7d32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>All transactions are safe and secure. Your information is encrypted.</span>
+            </div>
+
+            <!-- Apple Pay -->
+            <button type="button" class="apple-pay-btn">
+              <span class="apple-pay-btn-text">Pay with</span>
+              <svg width="42" height="17" viewBox="0 0 42 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.92 2.32c-.5.59-1.31 1.05-2.12.98-.1-.81.3-1.68.75-2.22C7.03.48 7.92.06 8.63 0c.09.86-.24 1.7-.75 2.32h.04zm.74 1.18c-1.17-.07-2.17.66-2.73.66-.57 0-1.43-.63-2.37-.61-1.22.02-2.35.71-2.97 1.8-1.27 2.19-.33 5.43.9 7.21.61.88 1.33 1.86 2.28 1.82.91-.04 1.25-.59 2.36-.59 1.09 0 1.41.59 2.36.57.98-.02 1.6-.89 2.21-1.77.69-1.01.98-1.99.99-2.05-.02-.01-1.9-.75-1.92-2.96-.01-1.85 1.51-2.74 1.59-2.78-.87-1.28-2.22-1.43-2.7-1.46v.01zm7.44-2.54v14.66h2.24v-5.01h3.1c2.84 0 4.83-1.95 4.83-4.83 0-2.88-1.95-4.81-4.74-4.81h-5.43zm2.24 1.88h2.59c1.95 0 3.06 1.04 3.06 2.95 0 1.9-1.11 2.95-3.07 2.95h-2.58V2.84zm12.36 12.89c1.41 0 2.71-.71 3.3-1.85h.05v1.73h2.07V8.71c0-2.08-1.66-3.42-4.23-3.42-2.38 0-4.13 1.36-4.19 3.22h2.02c.17-.89.99-1.47 2.11-1.47 1.37 0 2.13.64 2.13 1.81v.79l-2.79.17c-2.59.16-3.99 1.22-3.99 3.07 0 1.87 1.44 3.12 3.51 3.12v-.01zm.6-1.71c-1.19 0-1.95-.57-1.95-1.45 0-0.9.73-1.43 2.13-1.51l2.48-.16v.81c0 1.35-1.14 2.31-2.66 2.31zm7.07 5.63c2.19 0 3.21-.84 4.11-3.37l3.94-11.03h-2.27l-2.64 8.56h-.05l-2.64-8.56h-2.34l3.78 10.47-.2.63c-.34 1.08-.9 1.5-1.89 1.5-.18 0-.52-.02-.66-.03v1.72c.13.03.7.05.86.05v.06z" fill="white"/>
+              </svg>
+            </button>
+
+            <!-- Or divider -->
+            <div class="payment-or-divider">
+              <hr />
+              <span>or pay with</span>
+              <hr />
+            </div>
+
+            <!-- Credit/Debit Card option -->
+            <div class="payment-option active" data-payment="card">
+              <div class="payment-option-radio"></div>
+              <span class="payment-option-label">Credit / Debit Card</span>
+              <div class="payment-option-icons">
+                <svg width="36" height="24" viewBox="0 0 36 24" fill="none"><rect width="36" height="24" rx="4" fill="#1A1F71"/><path d="M14.5 15.5L16.5 8.5H18.5L16.5 15.5H14.5Z" fill="white"/><path d="M23 8.5C22.5 8.3 21.7 8 20.8 8C18.8 8 17.4 9 17.4 10.5C17.4 11.6 18.4 12.2 19.2 12.5C20 12.9 20.3 13.1 20.3 13.5C20.3 14 19.7 14.3 19.1 14.3C18.3 14.3 17.9 14.2 17.2 13.9L16.9 13.8L16.6 15.3C17.1 15.5 18 15.7 18.9 15.7C21 15.7 22.4 14.7 22.4 13.1C22.4 12.2 21.8 11.5 20.6 10.9C19.9 10.6 19.5 10.3 19.5 10C19.5 9.7 19.9 9.4 20.6 9.4C21.2 9.4 21.7 9.5 22 9.6L22.2 9.7L23 8.5Z" fill="white"/><path d="M25.7 8.5H24.2C23.7 8.5 23.4 8.7 23.2 9.1L20.5 15.5H22.6L23 14.4H25.5L25.8 15.5H27.5L25.7 8.5ZM23.6 12.8L24.5 10.3L25 12.8H23.6Z" fill="white"/><path d="M13.5 8.5L11.5 13.2L11.3 12.2C10.9 11 9.8 9.7 8.5 9L10.3 15.5H12.4L15.6 8.5H13.5Z" fill="white"/><path d="M10.2 8.5H7L7 8.7C9.5 9.3 11.2 10.8 11.8 12.7L11.1 9.2C11 8.7 10.7 8.5 10.2 8.5Z" fill="#F9A51A"/></svg>
+                <svg width="36" height="24" viewBox="0 0 36 24" fill="none"><rect width="36" height="24" rx="4" fill="#252525"/><circle cx="14" cy="12" r="7" fill="#EB001B"/><circle cx="22" cy="12" r="7" fill="#F79E1B"/><path d="M18 6.8C19.5 8 20.4 9.9 20.4 12C20.4 14.1 19.5 16 18 17.2C16.5 16 15.6 14.1 15.6 12C15.6 9.9 16.5 8 18 6.8Z" fill="#FF5F00"/></svg>
+                <svg width="36" height="24" viewBox="0 0 36 24" fill="none"><rect width="36" height="24" rx="4" fill="#016FD0"/><path d="M18 18.5L15.5 8H13L10 18.5H12.3L12.8 16.5H15.7L16.2 18.5H18ZM13.2 14.7L14.3 10.2L15.3 14.7H13.2Z" fill="white"/><path d="M27 18.5L24.5 8H22L19 18.5H21.3L21.8 16.5H24.7L25.2 18.5H27ZM22.2 14.7L23.3 10.2L24.3 14.7H22.2Z" fill="white"/></svg>
+                <svg width="36" height="24" viewBox="0 0 36 24" fill="none"><rect width="36" height="24" rx="4" fill="#F3F4F4"/><path d="M18 19C22.4183 19 26 15.866 26 12C26 8.13401 22.4183 5 18 5C13.5817 5 10 8.13401 10 12C10 15.866 13.5817 19 18 19Z" stroke="#F47216" stroke-width="1.5"/><path d="M14 12H22M18 8V16" stroke="#F47216" stroke-width="1.2" stroke-linecap="round"/></svg>
+              </div>
+            </div>
+
+            <!-- Card fields -->
+            <div class="payment-fields">
+              <div class="payment-field-group">
+                <label class="payment-field-label">Card number</label>
+                <input type="text" class="payment-field-input" placeholder="1234 5678 9012 3456" />
+              </div>
+              <div class="payment-field-row">
+                <div class="payment-field-group">
+                  <label class="payment-field-label">Expiration date</label>
+                  <input type="text" class="payment-field-input" placeholder="MM / YY" />
+                </div>
+                <div class="payment-field-group">
+                  <label class="payment-field-label">CVC</label>
+                  <input type="text" class="payment-field-input" placeholder="CVC" />
+                </div>
+              </div>
+            </div>
+
+            <!-- PayPal option -->
+            <div class="payment-option" data-payment="paypal">
+              <div class="payment-option-radio"></div>
+              <span class="payment-option-label">PayPal</span>
+              <div class="payment-option-icons">
+                <svg width="80" height="20" viewBox="0 0 80 20" fill="none"><path d="M29.5 5H26.3C26.1 5 25.9 5.2 25.8 5.3L24.3 14.6C24.3 14.7 24.4 14.8 24.5 14.8H26C26.2 14.8 26.4 14.6 26.4 14.5L26.8 12C26.8 11.8 27 11.7 27.2 11.7H28.3C30.6 11.7 32 10.6 32.3 8.4C32.5 7.5 32.3 6.7 31.9 6.2C31.4 5.5 30.6 5 29.5 5ZM29.9 8.5C29.7 9.8 28.7 9.8 27.8 9.8H27.3L27.7 7.3C27.7 7.2 27.8 7.1 27.9 7.1H28.2C28.8 7.1 29.4 7.1 29.7 7.5C29.9 7.7 30 8 29.9 8.5Z" fill="#253B80"/><path d="M39.8 8.4H38.3C38.2 8.4 38.1 8.5 38.1 8.6L38 9.1L37.9 9C37.5 8.5 36.7 8.3 36 8.3C34.3 8.3 32.8 9.6 32.5 11.4C32.4 12.3 32.6 13.2 33.1 13.7C33.5 14.3 34.2 14.5 35 14.5C36.3 14.5 37 13.7 37 13.7L36.9 14.2C36.9 14.3 37 14.5 37.1 14.5H38.5C38.7 14.5 38.9 14.3 38.9 14.1L39.8 8.7C39.9 8.6 39.8 8.4 39.8 8.4ZM37.5 11.5C37.3 12.4 36.6 13 35.7 13C35.2 13 34.9 12.8 34.7 12.6C34.5 12.3 34.4 11.9 34.5 11.5C34.6 10.6 35.4 10 36.2 10C36.7 10 37 10.2 37.2 10.4C37.4 10.7 37.5 11.1 37.5 11.5Z" fill="#253B80"/><path d="M48 8.4H46.5C46.3 8.4 46.2 8.5 46.1 8.6L44.1 11.6L43.2 8.7C43.2 8.5 43 8.4 42.8 8.4H41.4C41.2 8.4 41.1 8.6 41.2 8.8L42.8 13.8L41.3 15.8C41.2 16 41.3 16.2 41.5 16.2H43C43.2 16.2 43.3 16.1 43.4 16L48.2 8.8C48.3 8.6 48.2 8.4 48 8.4Z" fill="#253B80"/><path d="M53.5 5H50.3C50.1 5 49.9 5.2 49.8 5.3L48.3 14.6C48.3 14.7 48.4 14.8 48.5 14.8H50.1C50.2 14.8 50.3 14.7 50.3 14.6L50.8 12C50.8 11.8 51 11.7 51.2 11.7H52.3C54.6 11.7 56 10.6 56.3 8.4C56.5 7.5 56.3 6.7 55.9 6.2C55.4 5.5 54.6 5 53.5 5ZM53.9 8.5C53.7 9.8 52.7 9.8 51.8 9.8H51.3L51.7 7.3C51.7 7.2 51.8 7.1 51.9 7.1H52.2C52.8 7.1 53.4 7.1 53.7 7.5C53.9 7.7 54 8 53.9 8.5Z" fill="#179BD7"/><path d="M63.8 8.4H62.3C62.2 8.4 62.1 8.5 62.1 8.6L62 9.1L61.9 9C61.5 8.5 60.7 8.3 60 8.3C58.3 8.3 56.8 9.6 56.5 11.4C56.4 12.3 56.6 13.2 57.1 13.7C57.5 14.3 58.2 14.5 59 14.5C60.3 14.5 61 13.7 61 13.7L60.9 14.2C60.9 14.3 61 14.5 61.1 14.5H62.5C62.7 14.5 62.9 14.3 62.9 14.1L63.8 8.7C63.9 8.6 63.8 8.4 63.8 8.4ZM61.5 11.5C61.3 12.4 60.6 13 59.7 13C59.2 13 58.9 12.8 58.7 12.6C58.5 12.3 58.4 11.9 58.5 11.5C58.6 10.6 59.4 10 60.2 10C60.7 10 61 10.2 61.2 10.4C61.4 10.7 61.5 11.1 61.5 11.5Z" fill="#179BD7"/><path d="M65.2 5.2L63.7 14.6C63.7 14.7 63.8 14.8 63.9 14.8H65.3C65.5 14.8 65.7 14.6 65.8 14.5L67.3 5.1C67.3 5 67.2 4.9 67.1 4.9H65.5C65.3 5 65.2 5.1 65.2 5.2Z" fill="#179BD7"/></svg>
+              </div>
+            </div>
+
+            <!-- Divider + Satisfaction -->
+            <hr class="payment-divider" />
+
+            <div class="payment-satisfaction">
+              <svg class="payment-satisfaction-icon" width="64" height="64" viewBox="0 0 64 64" fill="none">
+                <circle cx="32" cy="32" r="30" stroke="#2e7d32" stroke-width="2" fill="none"/>
+                <path d="M20 32L28 40L44 24" stroke="#2e7d32" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <div class="payment-satisfaction-text">
+                <strong>100% Satisfaction Money-back Guarantee</strong>
+                We believe in the quality of our food, and that your pup will love it too. If you or your pup aren't satisfied, we'll make it right.
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Summary (right on desktop) -->
+          <div class="payment-order-summary-wrapper">
+            <div class="order-summary" id="payment-order-summary">
+              <div class="order-summary-top">
+                <h2 class="order-summary-heading">Order Summary for <span class="pet-name-placeholder">your pup</span></h2>
+
+                <!-- Discount code -->
+                <div class="discount-field">
+                  <input class="discount-input" type="text" placeholder="Discount code" />
+                  <button type="button" class="discount-apply-btn">Apply</button>
+                </div>
+
+                <hr class="order-divider" />
+
+                <!-- Plan header -->
+                <div class="order-plan-header">
+                  <p class="order-plan-name"><span class="pet-name-placeholder">your pup</span>'s plan</p>
+                  <div class="order-plan-tags">
+                    <span class="order-plan-tag">Mixed plan · 75% portions ·</span>
+                    <span class="order-plan-tag-highlight">$2.30/meal</span>
+                  </div>
+                </div>
+
+                <hr class="order-divider" />
+
+                <!-- Delivery info banner -->
+                <div class="order-delivery-banner">
+                  <svg class="order-delivery-banner-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M16.474 5.408l2.118 2.117m-.756-3.982L12.109 9.27a2.118 2.118 0 0 0-.58 1.082l-.427 2.14 2.14-.428a2.118 2.118 0 0 0 1.082-.58l5.727-5.727a1.853 1.853 0 1 0-2.621-2.621z" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M19 15v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <div class="order-delivery-banner-text">
+                    <p class="order-delivery-banner-title">Delivering on Friday, February 27</p>
+                    <p class="order-delivery-banner-link">Add delivery instructions</p>
+                  </div>
+                </div>
+
+                <hr class="order-divider" />
+
+                <!-- Trial box -->
+                <div class="order-line-item">
+                  <div class="order-item-thumb">
+                    <img src="https://www.figma.com/api/mcp/asset/6178acee-b9ea-4328-9d6c-066e4be8ec7e" alt="Trial box" />
+                  </div>
+                  <div class="order-item-info">
+                    <p class="order-item-name">2-Week Trial Box for <span class="pet-name-placeholder">your pup</span></p>
+                    <p class="order-item-desc">14 days of food</p>
+                  </div>
+                  <div class="order-item-price">
+                    <span class="order-item-price-discount">$32.20</span>
+                    <span class="order-item-price-original">$64.40</span>
+                  </div>
+                </div>
+
+                <hr class="order-divider" />
+
+                <!-- Welcome Kit -->
+                <div class="order-line-item">
+                  <div class="order-item-thumb">
+                    <img src="https://www.figma.com/api/mcp/asset/a8355322-c9e2-4867-b0ba-9eea9b85502e" alt="Welcome Kit" />
+                  </div>
+                  <div class="order-item-info">
+                    <p class="order-item-name">Welcome Kit</p>
+                  </div>
+                  <div class="order-item-price">
+                    <span class="order-item-free">FREE</span>
+                  </div>
+                </div>
+
+                <hr class="order-divider" />
+
+                <!-- Sample Pack -->
+                <div class="order-line-item">
+                  <div class="order-item-thumb">
+                    <img src="https://www.figma.com/api/mcp/asset/fd278636-7563-4475-a919-17d604345021" alt="Sample Pack" />
+                  </div>
+                  <div class="order-item-info">
+                    <p class="order-item-name">4oz Air-Dried Sample Pack</p>
+                  </div>
+                  <div class="order-item-price">
+                    <span class="order-item-free">FREE</span>
+                  </div>
+                </div>
+
+                <!-- Selected Wellness Boosts (mirrored from checkout) -->
+                <div id="payment-selected-boosts-container"></div>
+
+                <hr class="order-divider" id="payment-wellness-boost-divider" />
+
+                <!-- Wellness Boost Carousel -->
+                <div class="wellness-boost" id="payment-wellness-boost">
+                  <button type="button" class="wellness-boost-header" id="payment-wellness-boost-toggle">
+                    <svg class="wellness-boost-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M3 9.5V5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V9.5M3 9.5H21M3 9.5V12M21 9.5V12M8 3V6M16 3V6M7 14H10V21H7V14ZM14 14H17V21H14V14ZM3 12H21V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V12Z" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="wellness-boost-title">Add a wellness boost for <span class="pet-name-placeholder">your pup</span>?</span>
+                    <svg class="wellness-boost-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12 10L8 6L4 10" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                  <div class="wellness-boost-content" id="payment-wellness-boost-content">
+                    <div class="wellness-boost-cards-wrapper" id="payment-wellness-boost-carousel">
+                      <div class="wellness-boost-cards">
+                        <div class="wellness-boost-card" data-boost-name="Dental Sticks" data-boost-price="19.99" data-boost-image="https://www.figma.com/api/mcp/asset/ecb9699e-65e2-43fa-b3bd-dae18f44e347">
+                          <div class="wellness-boost-card-image" style="background-color: #caf2cd;">
+                            <img src="https://www.figma.com/api/mcp/asset/ecb9699e-65e2-43fa-b3bd-dae18f44e347" alt="Dental Sticks" />
+                            <button type="button" class="wellness-boost-card-add" aria-label="Add Dental Sticks">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                          </div>
+                          <p class="wellness-boost-card-name">Dental Sticks</p>
+                          <p class="wellness-boost-card-price">$19.99</p>
+                        </div>
+                        <div class="wellness-boost-card" data-boost-name="Chicken Lite Bites Dog Treats" data-boost-price="9.99" data-boost-image="https://www.figma.com/api/mcp/asset/9ef6abc0-3dc9-4d06-9dd9-8e90d8a7cbd2">
+                          <div class="wellness-boost-card-image" style="background-color: #edebab;">
+                            <img src="https://www.figma.com/api/mcp/asset/9ef6abc0-3dc9-4d06-9dd9-8e90d8a7cbd2" alt="Chicken Lite Bites Dog Treats" />
+                            <button type="button" class="wellness-boost-card-add" aria-label="Add Chicken Lite Bites">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                          </div>
+                          <p class="wellness-boost-card-name">Chicken Lite Bites Dog Treats</p>
+                          <p class="wellness-boost-card-price">$9.99</p>
+                        </div>
+                        <div class="wellness-boost-card" data-boost-name="Probiotic Soft Chews" data-boost-price="23.50" data-boost-image="https://www.figma.com/api/mcp/asset/ba2876da-b8a5-4e26-bb43-958cb1c43dea">
+                          <div class="wellness-boost-card-image" style="background-color: #caf2cd;">
+                            <img src="https://www.figma.com/api/mcp/asset/ba2876da-b8a5-4e26-bb43-958cb1c43dea" alt="Probiotic Soft Chews" />
+                            <button type="button" class="wellness-boost-card-add" aria-label="Add Probiotic Soft Chews">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                          </div>
+                          <p class="wellness-boost-card-name">Probiotic Soft Chews</p>
+                          <p class="wellness-boost-card-price">$23.50</p>
+                        </div>
+                        <div class="wellness-boost-card" data-boost-name="Snack Sticks Lamb Dog Treats" data-boost-price="13.99" data-boost-image="https://www.figma.com/api/mcp/asset/5ada325d-9605-4896-b34e-b6a7fadcd578">
+                          <div class="wellness-boost-card-image" style="background-color: #f3c1de;">
+                            <img src="https://www.figma.com/api/mcp/asset/5ada325d-9605-4896-b34e-b6a7fadcd578" alt="Snack Sticks Lamb Dog Treats" />
+                            <button type="button" class="wellness-boost-card-add" aria-label="Add Snack Sticks">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                          </div>
+                          <p class="wellness-boost-card-name">Snack Sticks Lamb Dog Treats</p>
+                          <p class="wellness-boost-card-price">$13.99</p>
+                        </div>
+                        <div class="wellness-boost-card" data-boost-name="Belly Bites Beef Dog Treats" data-boost-price="9.99" data-boost-image="https://www.figma.com/api/mcp/asset/c53e3025-d9d5-4e12-86e4-2a97ae7a8101">
+                          <div class="wellness-boost-card-image" style="background-color: #f3c1de;">
+                            <img src="https://www.figma.com/api/mcp/asset/c53e3025-d9d5-4e12-86e4-2a97ae7a8101" alt="Belly Bites Beef Dog Treats" />
+                            <button type="button" class="wellness-boost-card-add" aria-label="Add Belly Bites">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                          </div>
+                          <p class="wellness-boost-card-name">Belly Bites Beef Dog Treats</p>
+                          <p class="wellness-boost-card-price">$9.99</p>
+                        </div>
+                        <div class="wellness-boost-card" data-boost-name="Hip &amp; Joint Soft Chews" data-boost-price="25.00" data-boost-image="https://www.figma.com/api/mcp/asset/e5c2df9e-9425-42f1-9df2-70e20f3dea04">
+                          <div class="wellness-boost-card-image" style="background-color: #f3c1de;">
+                            <img src="https://www.figma.com/api/mcp/asset/e5c2df9e-9425-42f1-9df2-70e20f3dea04" alt="Hip &amp; Joint Soft Chews" />
+                            <button type="button" class="wellness-boost-card-add" aria-label="Add Hip &amp; Joint Soft Chews">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                          </div>
+                          <p class="wellness-boost-card-name">Hip &amp; Joint Soft Chews</p>
+                          <p class="wellness-boost-card-price">$25.00</p>
+                        </div>
+                        <div class="wellness-boost-card" data-boost-name="8-in-1 Wellness Soft Chews" data-boost-price="22.00" data-boost-image="https://www.figma.com/api/mcp/asset/f0566316-aec8-4c70-a764-9eec96f51418">
+                          <div class="wellness-boost-card-image" style="background-color: #f3c1de;">
+                            <img src="https://www.figma.com/api/mcp/asset/f0566316-aec8-4c70-a764-9eec96f51418" alt="8-in-1 Wellness Soft Chews" />
+                            <button type="button" class="wellness-boost-card-add" aria-label="Add 8-in-1 Wellness Soft Chews">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                          </div>
+                          <p class="wellness-boost-card-name">8-in-1 Wellness Soft Chews</p>
+                          <p class="wellness-boost-card-price">$22.00</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <hr class="order-divider" />
+
+                <!-- Standard Shipping -->
+                <div class="order-shipping-row">
+                  <span class="order-shipping-label">Standard Shipping</span>
+                  <div class="order-shipping-prices">
+                    <span class="order-item-price-original">$10.99</span>
+                    <span class="order-item-free">FREE</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Total section -->
+              <div class="order-total-section">
+                <div class="order-total-row">
+                  <span class="order-total-label">First Box Total</span>
+                  <div class="order-total-prices">
+                    <span class="order-total-badge">57% OFF</span>
+                    <span class="order-total-original">$75.39</span>
+                    <span class="order-total-value">$32.20</span>
+                  </div>
+                </div>
+                <p class="order-delivery-note">Your first delivery arrives on Friday, February 27, 2026. Our fresh products are insulated with dry ice, and our air-dried products are shelf stable. No need to be home for delivery.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom section: Terms + Place order + Value props (below payment card on desktop) -->
+          <div class="payment-bottom-section">
+            <p class="payment-terms">By clicking 'Place order' I agree to The Pets Table's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+            <button type="button" class="place-order-btn" id="place-order-btn">Place order</button>
+
+            <!-- Value props -->
+            <div class="payment-value-props">
+              <div class="payment-value-prop">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 18.333A8.333 8.333 0 1 0 10 1.667a8.333 8.333 0 0 0 0 16.666z" stroke="#2e7d32" stroke-width="1.5"/><path d="M7.5 10l1.667 1.667L12.5 8.333" stroke="#2e7d32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <p class="payment-value-prop-text"><strong>Have a picky eater?</strong> We guarantee your pup will love our food or your money back.</p>
+              </div>
+              <div class="payment-value-prop">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 18.333A8.333 8.333 0 1 0 10 1.667a8.333 8.333 0 0 0 0 16.666z" stroke="#2e7d32" stroke-width="1.5"/><path d="M7.5 10l1.667 1.667L12.5 8.333" stroke="#2e7d32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <p class="payment-value-prop-text"><strong>No commitment.</strong> Reschedule a box or cancel anytime.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Step: Loading / Preparing Dashboard -->
+      <div class="quiz-step hidden" id="step-loading">
+        <div class="loading-step-container">
+          <div class="loading-card">
+            <h2 class="loading-heading">Just a moment, we are setting up <span class="pet-name-placeholder">your pup</span>'s account...</h2>
+            <p class="loading-subtext">Please keep this page open.</p>
+            <div class="loading-illustration">
+              <img src="https://www.figma.com/api/mcp/asset/f9b11110-e7d5-4fdd-b22e-bd1815be688f" alt="Dogs celebrating" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step: Order Confirmation / Success -->
+      <div class="quiz-step hidden" id="step-success">
+        <div class="success-step-layout">
+          <!-- Left / Main column -->
+          <div class="success-main-column">
+            <div class="success-header">
+              <div class="success-checkmark">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                  <circle cx="24" cy="24" r="24" fill="#007838"/>
+                  <path d="M14 24L21 31L34 18" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h1 class="success-thank-you">Thank you, <span class="pet-name-placeholder">pet parent</span>!</h1>
+              <h2 class="success-confirmed">Your order is confirmed.</h2>
+              <p class="success-delivery-info">The box will arrive at your address on Friday, February 27, 2026.</p>
+            </div>
+
+            <hr class="success-divider" />
+
+            <!-- Promo banners -->
+            <div class="success-promo-section">
+              <div class="success-promo-banner">
+                <img src="https://www.figma.com/api/mcp/asset/c0a28f5b-8f85-46b5-b11a-e311ea7dce0a" alt="Add more pups and get a deal on their Trial Box" class="success-promo-banner-img" />
+              </div>
+              <div class="success-promo-banner">
+                <img src="https://www.figma.com/api/mcp/asset/8f9e0333-7858-4448-bf51-a2c59e03fbef" alt="Discover our exclusive add-ons" class="success-promo-banner-img" />
+              </div>
+            </div>
+
+            <!-- Discount banner -->
+            <div class="success-discount-banner">
+              <img src="assets/discount-tag-composed.svg" alt="" class="success-discount-icon" />
+              <p class="success-discount-text">Get a <strong>30% off discount</strong> on your next box when you add another pet within the next 24 hours!</p>
+            </div>
+
+            <hr class="success-divider" />
+
+            <button type="button" class="success-continue-btn">Continue to deliveries</button>
+          </div>
+
+          <!-- Vertical divider (desktop) -->
+          <div class="success-vertical-divider"></div>
+
+          <!-- Right column: Order Summary -->
+          <div class="success-order-column">
+            <h2 class="success-order-heading">Order Summary</h2>
+
+            <hr class="order-divider" />
+
+            <!-- Dynamic order items will be injected here -->
+            <div id="success-order-items"></div>
+
+            <!-- Info banner -->
+            <div class="success-info-banner">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="9" stroke="#676767" stroke-width="1.5"/>
+                <path d="M10 9V14M10 6.5V7" stroke="#676767" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <p class="success-info-text">You can make changes to the meals and delivery frequency in your account dashboard after purchase.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -6982,35 +8280,35 @@
         {
           id: 'chicken-casserole',
           name: 'Chicken Casserole with Green Beans',
-          image: 'https://www.figma.com/api/mcp/asset/f9b86c19-8bc7-445f-b33d-38c0cee0c17c',
+          image: 'https://www.figma.com/api/mcp/asset/eb27d296-5a0a-42d9-8731-0632c4b275f9',
           tags: ['Good Vision', 'Gut Health'],
           hasAllergen: false
         },
         {
           id: 'turkey-casserole',
           name: 'Turkey Casserole with Broccoli',
-          image: 'https://www.figma.com/api/mcp/asset/153d215f-13b9-428c-8edd-48698076c60c',
+          image: 'https://www.figma.com/api/mcp/asset/e6cc9991-ddf3-41f6-a27f-534a44891f0b',
           tags: ['Good Vision', 'Gut Health'],
           hasAllergen: false
         },
         {
           id: 'beef-stew',
           name: 'Beef Stew with Carrots',
-          image: 'https://www.figma.com/api/mcp/asset/541b4cc9-ec84-40fb-b504-2bed0896d7c8',
+          image: 'https://www.figma.com/api/mcp/asset/78a1f08a-479d-419d-8828-b9d60c1bcc31',
           tags: ['Good Vision', 'Gut Health'],
           hasAllergen: true
         },
         {
           id: 'chicken-entree',
           name: 'Chicken Entrée with Brown Rice',
-          image: 'https://www.figma.com/api/mcp/asset/35910298-2309-466a-834e-9360e531066e',
+          image: 'https://www.figma.com/api/mcp/asset/9c0ab05a-6a7f-47df-94fd-83598f05d0d7',
           tags: ['Good Vision', 'Gut Health'],
           hasAllergen: false
         },
         {
           id: 'pork-stew',
           name: 'Pork Stew with Butternut Squash',
-          image: 'https://www.figma.com/api/mcp/asset/e204f1a0-eb0d-4540-ae60-7e709fa3268c',
+          image: 'https://www.figma.com/api/mcp/asset/5d44dc27-c6c3-4479-ba92-ef41016aec25',
           tags: ['Good Vision', 'Gut Health'],
           hasAllergen: false
         }
@@ -7019,14 +8317,14 @@
         {
           id: 'air-dried-chicken',
           name: 'Air-Dried Chicken Recipe',
-          image: 'https://www.figma.com/api/mcp/asset/f9b86c19-8bc7-445f-b33d-38c0cee0c17c',
+          image: 'https://www.figma.com/api/mcp/asset/eb27d296-5a0a-42d9-8731-0632c4b275f9',
           tags: ['Joint Health', 'Skin & Coat'],
           hasAllergen: false
         },
         {
           id: 'air-dried-beef',
           name: 'Air-Dried Beef Recipe',
-          image: 'https://www.figma.com/api/mcp/asset/541b4cc9-ec84-40fb-b504-2bed0896d7c8',
+          image: 'https://www.figma.com/api/mcp/asset/78a1f08a-479d-419d-8828-b9d60c1bcc31',
           tags: ['Joint Health', 'Skin & Coat'],
           hasAllergen: false
         }
@@ -7254,7 +8552,7 @@
         id: 'dental-sticks',
         name: 'Dental Sticks',
         price: 9.99,
-        image: 'https://www.figma.com/api/mcp/asset/e5303a7b-fa28-4a87-94f5-75ead1b69166',
+        image: 'https://www.figma.com/api/mcp/asset/ecb9699e-65e2-43fa-b3bd-dae18f44e347',
         tags: ['Dog Treats', 'Oral Health', 'Chicken Flavor'],
         recommended: true,
         healthDomain: 'dental'
@@ -7263,7 +8561,7 @@
         id: 'probiotic-chews',
         name: 'Probiotic Chews',
         price: 9.99,
-        image: 'https://www.figma.com/api/mcp/asset/3b868662-d97e-4b93-a7ec-a0b3819b1bd9',
+        image: 'https://www.figma.com/api/mcp/asset/ba2876da-b8a5-4e26-bb43-958cb1c43dea',
         tags: ['Dog Treats', 'Oral Health', 'Chicken Flavor'],
         recommended: true,
         healthDomain: 'dental'
@@ -7272,7 +8570,7 @@
         id: 'hip-joint-soft-chews',
         name: 'Hip & Joint Soft Chews, 60ct',
         price: 9.99,
-        image: 'https://www.figma.com/api/mcp/asset/5c132d5a-1d90-4851-a00b-cba385802e1a',
+        image: 'https://www.figma.com/api/mcp/asset/e5c2df9e-9425-42f1-9df2-70e20f3dea04',
         tags: ['Hip & Joint', 'Vet-Formulated'],
         recommended: false,
         healthDomain: 'joint'
@@ -7281,7 +8579,7 @@
         id: 'probiotic-soft-chews',
         name: 'Probiotic Soft Chews, 60 ct',
         price: 9.99,
-        image: 'https://www.figma.com/api/mcp/asset/566011be-3063-4a5e-ae13-06fbfe6f0d1b',
+        image: 'https://www.figma.com/api/mcp/asset/ba2876da-b8a5-4e26-bb43-958cb1c43dea',
         tags: ['Gut Health', 'Vet-Formulated'],
         recommended: false,
         healthDomain: 'digestive'
@@ -7290,7 +8588,7 @@
         id: '8-in-1-wellness-chews',
         name: '8-in-1 Wellness Soft Chews, 50ct',
         price: 9.99,
-        image: 'https://www.figma.com/api/mcp/asset/bb3830b5-97a4-405d-b4f9-94d62081c683',
+        image: 'https://www.figma.com/api/mcp/asset/f0566316-aec8-4c70-a764-9eec96f51418',
         tags: ['Heart Health', 'Immunity', 'Vet-Formulated'],
         recommended: false,
         healthDomain: 'immunity'
@@ -7299,7 +8597,7 @@
         id: 'dental-sticks-extra',
         name: 'Dental Sticks',
         price: 9.99,
-        image: 'https://www.figma.com/api/mcp/asset/e5303a7b-fa28-4a87-94f5-75ead1b69166',
+        image: 'https://www.figma.com/api/mcp/asset/ecb9699e-65e2-43fa-b3bd-dae18f44e347',
         tags: ['Dog Treats', 'Oral Health', 'Chicken Flavor'],
         recommended: false,
         healthDomain: 'dental'
@@ -7308,7 +8606,7 @@
         id: 'chicken-lite-bites',
         name: 'Chicken Lite Bites Dog Treats',
         price: 9.99,
-        image: 'https://www.figma.com/api/mcp/asset/dba41ccd-d66b-49be-8bb9-a36123f6f2f4',
+        image: 'https://www.figma.com/api/mcp/asset/9ef6abc0-3dc9-4d06-9dd9-8e90d8a7cbd2',
         tags: ['Grain-Free', 'For Training', '>90% Chicken'],
         recommended: false,
         healthDomain: null
@@ -7317,7 +8615,7 @@
         id: 'lamb-snack-sticks',
         name: 'Lamb Snack Sticks Dog Treats',
         price: 9.99,
-        image: 'https://www.figma.com/api/mcp/asset/aee5ca00-0a41-411f-bb6b-1a4b87f4ff40',
+        image: 'https://www.figma.com/api/mcp/asset/5ada325d-9605-4896-b34e-b6a7fadcd578',
         tags: ['Limited Ingredients', 'Grain-Inclusive'],
         recommended: false,
         healthDomain: null
@@ -7329,9 +8627,9 @@
 
     // Figma icon assets for wellness badges
     const wellnessBadgeIcons = {
-      heart: 'https://www.figma.com/api/mcp/asset/f168aff6-1d80-4f0c-849e-23307c66f28d',
-      sort: 'https://www.figma.com/api/mcp/asset/68f8d33c-f260-4539-9fc9-3c8ea8566cb4',
-      checkmark: 'https://www.figma.com/api/mcp/asset/55be5fc6-e282-40e7-970d-acb3c4512582'
+      heart: 'https://www.figma.com/api/mcp/asset/4953ee5b-d4bb-4b67-bdf1-a4d49640198f',
+      sort: 'https://www.figma.com/api/mcp/asset/ff141fd8-5b80-4459-ae66-28ac7f9f0e77',
+      checkmark: 'https://www.figma.com/api/mcp/asset/aa951d79-ca86-417f-935e-b2422d191190'
     };
 
     // Goal-to-badge mapping
@@ -7736,7 +9034,7 @@
       });
     });
 
-    // Checkout form submit
+    // Checkout form submit — navigate to payment step
     document.getElementById('checkout-form')?.addEventListener('submit', (e) => {
       e.preventDefault();
       quizState.formData.address = {
@@ -7750,7 +9048,198 @@
         phone: document.getElementById('checkout-phone').value,
       };
       saveState();
-      alert('Order submitted! Address saved.');
+      showPayment();
+    });
+
+    // Show payment step
+    function showPayment() {
+      document.querySelectorAll('.quiz-step').forEach(s => s.classList.add('hidden'));
+      document.getElementById('step-payment').classList.remove('hidden');
+      // Mirror selected boosts from checkout into payment order summary
+      const checkoutBoosts = document.getElementById('selected-boosts-container');
+      const paymentBoosts = document.getElementById('payment-selected-boosts-container');
+      if (checkoutBoosts && paymentBoosts) {
+        paymentBoosts.innerHTML = checkoutBoosts.innerHTML;
+      }
+      window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+    }
+
+    // Payment back button — return to checkout
+    document.getElementById('payment-back-btn')?.addEventListener('click', () => {
+      document.querySelectorAll('.quiz-step').forEach(s => s.classList.add('hidden'));
+      document.getElementById('step-checkout').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+    });
+
+    // Payment option toggle (card vs paypal)
+    document.querySelectorAll('#step-payment .payment-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('#step-payment .payment-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+      });
+    });
+
+    // Place order button
+    document.getElementById('place-order-btn')?.addEventListener('click', () => {
+      // Show loading screen
+      document.querySelectorAll('.quiz-step').forEach(s => s.classList.add('hidden'));
+      document.getElementById('step-loading').classList.remove('hidden');
+      // Hide footer buttons during loading
+      document.querySelector('.funnel-footer').style.display = 'none';
+      window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+
+      // After 5 seconds, show the success/confirmation page
+      setTimeout(() => {
+        showSuccess();
+      }, 5000);
+    });
+
+    function showSuccess() {
+      // Hide all steps and show success
+      document.querySelectorAll('.quiz-step').forEach(s => s.classList.add('hidden'));
+      document.getElementById('step-success').classList.remove('hidden');
+      // Hide progress tracker on success
+      const progressMobile = document.querySelector('.header-progress-mobile');
+      const progressDesktop = document.querySelector('.header-progress-desktop');
+      if (progressMobile) progressMobile.style.display = 'none';
+      if (progressDesktop) progressDesktop.style.display = 'none';
+      window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+
+      // Populate order summary in success page
+      populateSuccessOrderSummary();
+    }
+
+    function populateSuccessOrderSummary() {
+      const container = document.getElementById('success-order-items');
+      if (!container) return;
+
+      let html = '';
+
+      // Trial Box
+      html += `
+        <div class="success-order-item">
+          <div class="success-order-item-thumb">
+            <img src="https://www.figma.com/api/mcp/asset/6178acee-b9ea-4328-9d6c-066e4be8ec7e" alt="Trial box" />
+          </div>
+          <div class="success-order-item-info">
+            <p class="success-order-item-name">2-Week Trial Box for <span class="pet-name-placeholder">${getPetName()}</span></p>
+            <p class="success-order-item-desc">14 days of food</p>
+          </div>
+        </div>
+        <hr class="order-divider" />
+      `;
+
+      // Welcome Kit
+      html += `
+        <div class="success-order-item">
+          <div class="success-order-item-thumb">
+            <img src="https://www.figma.com/api/mcp/asset/a8355322-c9e2-4867-b0ba-9eea9b85502e" alt="Welcome Kit" />
+          </div>
+          <div class="success-order-item-info">
+            <p class="success-order-item-name">Welcome Kit</p>
+          </div>
+        </div>
+        <hr class="order-divider" />
+      `;
+
+      // Sample Pack
+      html += `
+        <div class="success-order-item">
+          <div class="success-order-item-thumb">
+            <img src="https://www.figma.com/api/mcp/asset/fd278636-7563-4475-a919-17d604345021" alt="Sample Pack" />
+          </div>
+          <div class="success-order-item-info">
+            <p class="success-order-item-name">4oz Air-Dried Sample Pack</p>
+          </div>
+        </div>
+        <hr class="order-divider" />
+      `;
+
+      // Selected wellness boosts from state
+      const boostIds = quizState.formData.selectedBoosts || [];
+      boostIds.forEach(boostId => {
+        const boostData = wellnessBoostsData.find(b => b.id === boostId);
+        if (!boostData) return;
+        html += `
+          <div class="success-order-item">
+            <div class="success-order-item-thumb">
+              <img src="${boostData.image}" alt="${boostData.name}" />
+            </div>
+            <div class="success-order-item-info">
+              <p class="success-order-item-name">${boostData.name}</p>
+            </div>
+          </div>
+          <hr class="order-divider" />
+        `;
+      });
+
+      container.innerHTML = html;
+
+      // Update pet name placeholders in success step
+      const petName = getPetName();
+      document.querySelectorAll('#step-success .pet-name-placeholder').forEach(el => {
+        el.textContent = petName;
+      });
+    }
+
+    function getPetName() {
+      return quizState.formData?.name || 'your pup';
+    }
+
+    // Payment wellness boost toggle
+    document.getElementById('payment-wellness-boost-toggle')?.addEventListener('click', () => {
+      const header = document.getElementById('payment-wellness-boost-toggle');
+      const content = document.getElementById('payment-wellness-boost-content');
+      header.classList.toggle('collapsed');
+      content.classList.toggle('hidden');
+    });
+
+    // Payment carousel — Add wellness boost to order summary
+    document.querySelectorAll('#payment-wellness-boost-carousel .wellness-boost-card-add').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.wellness-boost-card');
+        if (card.classList.contains('added')) return;
+
+        card.classList.add('added');
+
+        const name = card.dataset.boostName;
+        const price = card.dataset.boostPrice;
+        const image = card.dataset.boostImage;
+
+        // Change button to checkmark
+        btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 13L9 17L19 7" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+        // Add line item to #payment-selected-boosts-container
+        const container = document.getElementById('payment-selected-boosts-container');
+        const divider = document.createElement('hr');
+        divider.className = 'order-divider';
+        divider.dataset.boostLineItem = name;
+        container.appendChild(divider);
+
+        const lineItem = document.createElement('div');
+        lineItem.className = 'order-line-item';
+        lineItem.dataset.boostLineItem = name;
+        lineItem.innerHTML = `
+          <div class="order-item-thumb">
+            <img src="${image}" alt="${name}" />
+          </div>
+          <div class="order-item-info">
+            <p class="order-item-name">${name}</p>
+            <button type="button" class="order-item-remove" data-boost-card-name="${name}">Remove</button>
+          </div>
+          <div class="order-item-price">
+            <span class="order-item-price-regular">$${parseFloat(price).toFixed(2)}</span>
+          </div>
+        `;
+        container.appendChild(lineItem);
+
+        // Wire up remove button
+        lineItem.querySelector('.order-item-remove').addEventListener('click', () => {
+          container.querySelectorAll(`[data-boost-line-item="${name}"]`).forEach(el => el.remove());
+          card.classList.remove('added');
+          btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        });
+      });
     });
 
     // Render a single boost card

@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Goals — Compare Options | The Pets Table</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =============================================
+       DESIGN TOKENS (same as main prototype)
+       ============================================= */
+    :root {
+      --color-brand-foreground-default: #2E2E2E;
+      --color-brand-background-default: #F0F9F9;
+      --color-brand-background-press: #D6EEEF;
+      --color-accent-default: #BD0099;
+      --color-accent-teal: #007885;
+      --color-neutral-100: #FFFFFF;
+      --color-neutral-200: #F5F5F5;
+      --color-neutral-300: #E8E8E8;
+      --color-neutral-400: #C1C1C1;
+      --color-neutral-600: #676767;
+      --color-neutral-700: #4A4A4A;
+      --color-neutral-800: #2E2E2E;
+      --color-secondary-100: #F0F9F9;
+      --color-secondary-200: #D6EEEF;
+      --card-background-elevated: #FFFFFF;
+      --card-background-selected: #F0F9F9;
+      --card-border-default: #E8E8E8;
+      --card-border-selected: #2E2E2E;
+      --card-borderRadius: 1rem;
+      --button-background-primary-default: #2E2E2E;
+      --button-background-primary-hover: #1A1A1A;
+      --button-foreground-primary: #FFFFFF;
+      --button-borderRadius: 1rem;
+      --font-family-primary: Poppins, sans-serif;
+      --font-family-secondary: "Source Sans 3", "Source Sans Pro", sans-serif;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-md-2: 24px;
+      --spacing-lg: 32px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-family-secondary);
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--color-neutral-800);
+      background-color: #F5F5F5;
+    }
+
+    /* =============================================
+       COMPARISON LAYOUT
+       ============================================= */
+    .page-header {
+      background: var(--color-neutral-100);
+      border-bottom: 1px solid var(--color-neutral-300);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .page-header h1 {
+      font-family: var(--font-family-primary);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-neutral-800);
+      margin: 0;
+    }
+
+    .page-header p {
+      font-size: 14px;
+      color: var(--color-neutral-600);
+      margin-top: 4px;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .compare-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+    }
+
+    /* =============================================
+       OPTION CARD (outer wrapper)
+       ============================================= */
+    .option-card {
+      background: var(--color-neutral-100);
+      border-radius: 16px;
+      border: 1px solid var(--color-neutral-300);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .option-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--color-neutral-300);
+      background: var(--color-neutral-100);
+    }
+
+    .option-label {
+      font-family: var(--font-family-primary);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-accent-teal);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .option-title {
+      font-family: var(--font-family-primary);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-neutral-800);
+      line-height: 1.3;
+    }
+
+    .option-desc {
+      font-size: 14px;
+      color: var(--color-neutral-600);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .option-body {
+      padding: 20px;
+      flex: 1;
+      background: var(--color-secondary-100);
+    }
+
+    /* =============================================
+       MOCK STEP CONTAINER
+       ============================================= */
+    .mock-step {
+      background: var(--color-neutral-100);
+      border-radius: 12px;
+      padding: 20px 16px;
+      max-width: 100%;
+    }
+
+    .mock-step h2 {
+      font-family: var(--font-family-primary);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--color-neutral-800);
+      margin-bottom: 16px;
+    }
+
+    /* =============================================
+       GOAL GRID (shared across all options)
+       ============================================= */
+    .goal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .goal-card {
+      border: 1px solid var(--card-border-default);
+      border-radius: var(--card-borderRadius);
+      height: 96px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      background: var(--card-background-elevated);
+    }
+
+    .goal-card:hover { border-color: var(--color-neutral-400); }
+
+    .goal-card.selected {
+      border-color: var(--card-border-selected);
+      border-width: 2px;
+      background: var(--card-background-selected);
+    }
+
+    .goal-card-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+    }
+
+    .goal-card-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .goal-card-icon img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .goal-card-text {
+      font-family: var(--font-family-secondary);
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 1.3;
+      color: #242424;
+      text-align: center;
+    }
+
+    .goal-checkmark {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 16px;
+      height: 16px;
+      display: none;
+    }
+
+    .goal-card.selected .goal-checkmark {
+      display: block;
+    }
+
+    /* =============================================
+       MOCK CTA BUTTON
+       ============================================= */
+    .mock-cta {
+      display: block;
+      width: 100%;
+      padding: 14px 24px;
+      border-radius: var(--button-borderRadius);
+      background: var(--button-background-primary-default);
+      color: var(--button-foreground-primary);
+      font-family: var(--font-family-primary);
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: background 0.15s ease;
+    }
+
+    .mock-cta:hover { background: var(--button-background-primary-hover); }
+
+    /* Status message */
+    .status-msg {
+      text-align: center;
+      font-size: 13px;
+      color: var(--color-accent-teal);
+      font-weight: 600;
+      margin-top: 12px;
+      min-height: 20px;
+      transition: opacity 0.2s ease;
+    }
+
+    /* =============================================
+       OPTION A — ACCORDION
+       ============================================= */
+    .accordion-expand {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.25s ease, margin 0.3s ease;
+      margin-top: 0;
+    }
+
+    .accordion-expand.open {
+      max-height: 600px;
+      opacity: 1;
+      margin-top: 8px;
+      padding-bottom: 12px;
+    }
+
+    .accordion-sub-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      padding: 8px;
+      background: var(--color-secondary-100);
+      border-radius: 12px;
+    }
+
+    .sub-card {
+      border: 1px solid var(--card-border-default);
+      border-radius: 10px;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: var(--card-background-elevated);
+      position: relative;
+    }
+
+    .sub-card:hover { border-color: var(--color-neutral-400); }
+
+    .sub-card.selected {
+      border-color: var(--card-border-selected);
+      border-width: 2px;
+      padding: 9px 7px;
+      background: var(--card-background-selected);
+    }
+
+    .sub-card-icon { width: 24px; height: 24px; }
+    .sub-card-icon img { width: 24px; height: 24px; object-fit: contain; }
+
+    .sub-card-text {
+      font-family: var(--font-family-secondary);
+      font-size: 11px;
+      line-height: 1.3;
+      text-align: center;
+      color: #242424;
+    }
+
+    .sub-card .goal-checkmark {
+      width: 14px;
+      height: 14px;
+      top: -3px;
+      right: -3px;
+    }
+
+    /* The "Improve health" card gets taller when expanded */
+    .goal-card.accordion-host {
+      height: auto;
+      min-height: 96px;
+      transition: all 0.3s ease;
+    }
+
+    .goal-card.accordion-host.expanded {
+      grid-column: 1 / -1;
+      overflow: visible;
+    }
+
+    .goal-card.accordion-host .goal-card-content {
+      padding-bottom: 4px;
+      width: 100%;
+      height: auto;
+      flex: none;
+    }
+
+    .goal-card.accordion-host {
+      flex-direction: column;
+    }
+
+    .goal-card.accordion-host .accordion-expand {
+      width: 100%;
+      padding: 0 12px;
+    }
+
+    /* =============================================
+       OPTION B — CONNECTED SUB-OPTIONS
+       ============================================= */
+    .connected-sub-row {
+      grid-column: 1 / -1;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.3s ease;
+      padding: 0;
+    }
+
+    .connected-sub-row.open {
+      max-height: 300px;
+      opacity: 1;
+      padding: 4px 0 0;
+    }
+
+    .connected-sub-container {
+      display: flex;
+      gap: 6px;
+    }
+
+    .connected-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border: 1px solid var(--card-border-default);
+      border-radius: 24px;
+      background: var(--card-background-elevated);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .connected-chip:hover { border-color: var(--color-neutral-400); }
+
+    .connected-chip.selected {
+      border-color: var(--card-border-selected);
+      border-width: 2px;
+      padding: 7px 11px;
+      background: var(--card-background-selected);
+    }
+
+    .connected-chip-icon { width: 20px; height: 20px; flex-shrink: 0; }
+    .connected-chip-icon img { width: 20px; height: 20px; object-fit: contain; }
+
+    .connected-chip-text {
+      font-family: var(--font-family-secondary);
+      font-size: 12px;
+      line-height: 1.3;
+      color: #242424;
+    }
+
+    /* Scrollable wrapper for narrow screens */
+    .connected-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 4px;
+    }
+
+    .connected-scroll::-webkit-scrollbar { height: 0; }
+
+    /* =============================================
+       OPTION D — CHIPS INSIDE CARD
+       ============================================= */
+    .goal-card.chips-host {
+      height: auto;
+      min-height: 96px;
+    }
+
+    .goal-card.chips-host .goal-card-content {
+      padding-bottom: 2px;
+    }
+
+    .chips-tray {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.3s ease, opacity 0.2s ease;
+      width: 100%;
+    }
+
+    .chips-tray.open {
+      max-height: 200px;
+      opacity: 1;
+    }
+
+    .chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      justify-content: center;
+      padding: 4px 8px 8px;
+    }
+
+    .chip-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--color-neutral-400);
+      background: var(--card-background-elevated);
+      font-family: var(--font-family-secondary);
+      font-size: 11px;
+      line-height: 1.3;
+      color: #242424;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .chip-tag:hover { border-color: var(--color-neutral-700); }
+
+    .chip-tag.selected {
+      background: var(--card-border-selected);
+      color: var(--color-neutral-100);
+      border-color: var(--card-border-selected);
+    }
+
+    .chip-tag-icon { width: 14px; height: 14px; flex-shrink: 0; }
+    .chip-tag-icon img { width: 14px; height: 14px; object-fit: contain; }
+
+    /* =============================================
+       RESET / INSTRUCTION HINT
+       ============================================= */
+    .hint-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      border-top: 1px solid var(--color-neutral-300);
+      background: var(--color-neutral-100);
+    }
+
+    .hint-text {
+      font-size: 12px;
+      color: var(--color-neutral-600);
+    }
+
+    .reset-btn {
+      font-family: var(--font-family-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-accent-teal);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* =============================================
+       prefers-reduced-motion
+       ============================================= */
+    @media (prefers-reduced-motion: reduce) {
+      .accordion-expand,
+      .connected-sub-row,
+      .chips-tray,
+      .goal-card,
+      .sub-card,
+      .connected-chip,
+      .chip-tag {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1>Health Goals Integration — Compare Options</h1>
+    <p>Click "Improve health" in each option to see health sub-options appear instantly.</p>
+  </div>
+
+  <!-- THREE-COLUMN COMPARISON -->
+  <div class="compare-grid">
+
+    <!-- ==========================================
+         OPTION A: ACCORDION EXPAND
+         ========================================== -->
+    <div class="option-card" id="option-a">
+      <div class="option-header">
+        <div class="option-label">Option A</div>
+        <div class="option-title">Accordion Expand</div>
+        <div class="option-desc">The "Improve health" card grows taller to reveal nested health concern sub-options inside itself.</div>
+      </div>
+      <div class="option-body">
+        <div class="mock-step">
+          <h2>What's most important for you & Coco?</h2>
+
+          <div class="goal-grid" id="grid-a">
+            <div class="goal-card" data-value="human-grade-food" onclick="toggleGoal(this,'a')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/744a2602-4bf2-4e07-9b15-4afa50a60367" alt=""></div>
+                <div class="goal-card-text">Human-grade food</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+
+            <div class="goal-card accordion-host" data-value="improve-health" onclick="toggleGoal(this,'a')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/2d111d04-670f-42be-b274-a90e51ac46ac" alt=""></div>
+                <div class="goal-card-text">Improve health</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+
+              <!-- Accordion sub-options (hidden) -->
+              <div class="accordion-expand" id="accordion-a">
+                <div class="accordion-sub-grid">
+                  <div class="sub-card" data-health="dental" onclick="event.stopPropagation(); toggleHealth(this,'a')">
+                    <div class="sub-card-icon"><img src="https://www.figma.com/api/mcp/asset/744a2602-4bf2-4e07-9b15-4afa50a60367" alt=""></div>
+                    <div class="sub-card-text">Dental</div>
+                    <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+                  </div>
+                  <div class="sub-card" data-health="joint" onclick="event.stopPropagation(); toggleHealth(this,'a')">
+                    <div class="sub-card-icon"><img src="https://www.figma.com/api/mcp/asset/2d111d04-670f-42be-b274-a90e51ac46ac" alt=""></div>
+                    <div class="sub-card-text">Hip & joint</div>
+                    <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+                  </div>
+                  <div class="sub-card" data-health="digestive" onclick="event.stopPropagation(); toggleHealth(this,'a')">
+                    <div class="sub-card-icon"><img src="https://www.figma.com/api/mcp/asset/30eca42a-0527-4e9b-a4c7-eaa0c8dff38b" alt=""></div>
+                    <div class="sub-card-text">Digestive</div>
+                    <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+                  </div>
+                  <div class="sub-card" data-health="immunity" onclick="event.stopPropagation(); toggleHealth(this,'a')">
+                    <div class="sub-card-icon"><img src="https://www.figma.com/api/mcp/asset/6319d322-a5cb-4ab9-a935-8840ca9817bc" alt=""></div>
+                    <div class="sub-card-text">Immunity</div>
+                    <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="goal-card" data-value="affordability" onclick="toggleGoal(this,'a')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/4059d955-c043-4d67-bc10-378799e0fb46" alt=""></div>
+                <div class="goal-card-text">Affordability</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+
+            <div class="goal-card" data-value="picky-eater" onclick="toggleGoal(this,'a')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/6319d322-a5cb-4ab9-a935-8840ca9817bc" alt=""></div>
+                <div class="goal-card-text">Picky eater meals</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+
+            <div class="goal-card" data-value="convenient" onclick="toggleGoal(this,'a')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/30eca42a-0527-4e9b-a4c7-eaa0c8dff38b" alt=""></div>
+                <div class="goal-card-text">Convenient feeding</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+
+            <div class="goal-card" data-value="variety" onclick="toggleGoal(this,'a')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/7f4be807-5084-47db-9a33-5f831a7d0902" alt=""></div>
+                <div class="goal-card-text">Variety of options</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+          </div>
+
+          <button class="mock-cta" onclick="handleContinue('a')">Continue</button>
+          <div class="status-msg" id="status-a"></div>
+        </div>
+      </div>
+      <div class="hint-bar">
+        <span class="hint-text">Select "Improve health" to see sub-options</span>
+        <button class="reset-btn" onclick="resetOption('a')">Reset</button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         OPTION B: CONNECTED SUB-OPTIONS
+         ========================================== -->
+    <div class="option-card" id="option-b">
+      <div class="option-header">
+        <div class="option-label">Option B</div>
+        <div class="option-title">Connected Sub-options</div>
+        <div class="option-desc">Health chips appear below "Improve health" in the grid with a left-border connector line. No extra heading.</div>
+      </div>
+      <div class="option-body">
+        <div class="mock-step">
+          <h2>What's most important for you & Coco?</h2>
+
+          <div class="goal-grid" id="grid-b">
+            <div class="goal-card" data-value="human-grade-food" onclick="toggleGoal(this,'b')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/744a2602-4bf2-4e07-9b15-4afa50a60367" alt=""></div>
+                <div class="goal-card-text">Human-grade food</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+
+            <div class="goal-card" data-value="improve-health" onclick="toggleGoal(this,'b')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/2d111d04-670f-42be-b274-a90e51ac46ac" alt=""></div>
+                <div class="goal-card-text">Improve health</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+
+            <!-- Connected sub-row (spans full width below "Improve health") -->
+            <div class="connected-sub-row" id="connected-b">
+              <div class="connected-scroll">
+                <div class="connected-sub-container">
+                  <div class="connected-chip" data-health="dental" onclick="toggleHealth(this,'b')">
+                    <div class="connected-chip-icon"><img src="https://www.figma.com/api/mcp/asset/744a2602-4bf2-4e07-9b15-4afa50a60367" alt=""></div>
+                    <div class="connected-chip-text">Dental</div>
+                  </div>
+                  <div class="connected-chip" data-health="joint" onclick="toggleHealth(this,'b')">
+                    <div class="connected-chip-icon"><img src="https://www.figma.com/api/mcp/asset/2d111d04-670f-42be-b274-a90e51ac46ac" alt=""></div>
+                    <div class="connected-chip-text">Hip & joint</div>
+                  </div>
+                  <div class="connected-chip" data-health="digestive" onclick="toggleHealth(this,'b')">
+                    <div class="connected-chip-icon"><img src="https://www.figma.com/api/mcp/asset/30eca42a-0527-4e9b-a4c7-eaa0c8dff38b" alt=""></div>
+                    <div class="connected-chip-text">Digestive</div>
+                  </div>
+                  <div class="connected-chip" data-health="immunity" onclick="toggleHealth(this,'b')">
+                    <div class="connected-chip-icon"><img src="https://www.figma.com/api/mcp/asset/6319d322-a5cb-4ab9-a935-8840ca9817bc" alt=""></div>
+                    <div class="connected-chip-text">Immunity</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="goal-card" data-value="affordability" onclick="toggleGoal(this,'b')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/4059d955-c043-4d67-bc10-378799e0fb46" alt=""></div>
+                <div class="goal-card-text">Affordability</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+
+            <div class="goal-card" data-value="picky-eater" onclick="toggleGoal(this,'b')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/6319d322-a5cb-4ab9-a935-8840ca9817bc" alt=""></div>
+                <div class="goal-card-text">Picky eater meals</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+
+            <div class="goal-card" data-value="convenient" onclick="toggleGoal(this,'b')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/30eca42a-0527-4e9b-a4c7-eaa0c8dff38b" alt=""></div>
+                <div class="goal-card-text">Convenient feeding</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+
+            <div class="goal-card" data-value="variety" onclick="toggleGoal(this,'b')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/7f4be807-5084-47db-9a33-5f831a7d0902" alt=""></div>
+                <div class="goal-card-text">Variety of options</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+          </div>
+
+          <button class="mock-cta" onclick="handleContinue('b')">Continue</button>
+          <div class="status-msg" id="status-b"></div>
+        </div>
+      </div>
+      <div class="hint-bar">
+        <span class="hint-text">Select "Improve health" to see sub-options</span>
+        <button class="reset-btn" onclick="resetOption('b')">Reset</button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         OPTION D: CHIPS INSIDE CARD
+         ========================================== -->
+    <div class="option-card" id="option-d">
+      <div class="option-header">
+        <div class="option-label">Option D</div>
+        <div class="option-title">Chips Inside Card</div>
+        <div class="option-desc">Small selectable tag-style chips appear directly inside the "Improve health" card below the icon and label.</div>
+      </div>
+      <div class="option-body">
+        <div class="mock-step">
+          <h2>What's most important for you & Coco?</h2>
+
+          <div class="goal-grid" id="grid-d">
+            <div class="goal-card" data-value="human-grade-food" onclick="toggleGoal(this,'d')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/744a2602-4bf2-4e07-9b15-4afa50a60367" alt=""></div>
+                <div class="goal-card-text">Human-grade food</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+
+            <div class="goal-card chips-host" data-value="improve-health" onclick="toggleGoal(this,'d')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/2d111d04-670f-42be-b274-a90e51ac46ac" alt=""></div>
+                <div class="goal-card-text">Improve health</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+
+              <!-- Chips tray (hidden) -->
+              <div class="chips-tray" id="chips-d">
+                <div class="chips-row">
+                  <span class="chip-tag" data-health="dental" onclick="event.stopPropagation(); toggleHealth(this,'d')">
+                    <span class="chip-tag-icon"><img src="https://www.figma.com/api/mcp/asset/744a2602-4bf2-4e07-9b15-4afa50a60367" alt=""></span>
+                    Dental
+                  </span>
+                  <span class="chip-tag" data-health="joint" onclick="event.stopPropagation(); toggleHealth(this,'d')">
+                    <span class="chip-tag-icon"><img src="https://www.figma.com/api/mcp/asset/2d111d04-670f-42be-b274-a90e51ac46ac" alt=""></span>
+                    Hip & joint
+                  </span>
+                  <span class="chip-tag" data-health="digestive" onclick="event.stopPropagation(); toggleHealth(this,'d')">
+                    <span class="chip-tag-icon"><img src="https://www.figma.com/api/mcp/asset/30eca42a-0527-4e9b-a4c7-eaa0c8dff38b" alt=""></span>
+                    Digestive
+                  </span>
+                  <span class="chip-tag" data-health="immunity" onclick="event.stopPropagation(); toggleHealth(this,'d')">
+                    <span class="chip-tag-icon"><img src="https://www.figma.com/api/mcp/asset/6319d322-a5cb-4ab9-a935-8840ca9817bc" alt=""></span>
+                    Immunity
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="goal-card" data-value="affordability" onclick="toggleGoal(this,'d')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/4059d955-c043-4d67-bc10-378799e0fb46" alt=""></div>
+                <div class="goal-card-text">Affordability</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+
+            <div class="goal-card" data-value="picky-eater" onclick="toggleGoal(this,'d')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/6319d322-a5cb-4ab9-a935-8840ca9817bc" alt=""></div>
+                <div class="goal-card-text">Picky eater meals</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+
+            <div class="goal-card" data-value="convenient" onclick="toggleGoal(this,'d')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/30eca42a-0527-4e9b-a4c7-eaa0c8dff38b" alt=""></div>
+                <div class="goal-card-text">Convenient feeding</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+
+            <div class="goal-card" data-value="variety" onclick="toggleGoal(this,'d')">
+              <div class="goal-card-content">
+                <div class="goal-card-icon"><img src="https://www.figma.com/api/mcp/asset/7f4be807-5084-47db-9a33-5f831a7d0902" alt=""></div>
+                <div class="goal-card-text">Variety of options</div>
+              </div>
+              <img class="goal-checkmark" src="https://www.figma.com/api/mcp/asset/90d77bb4-4d84-44e0-bc07-1f3fd0992911" alt="">
+            </div>
+          </div>
+
+          <button class="mock-cta" onclick="handleContinue('d')">Continue</button>
+          <div class="status-msg" id="status-d"></div>
+        </div>
+      </div>
+      <div class="hint-bar">
+        <span class="hint-text">Select "Improve health" to see sub-options</span>
+        <button class="reset-btn" onclick="resetOption('d')">Reset</button>
+      </div>
+    </div>
+
+  </div><!-- /compare-grid -->
+
+  <script>
+    // =============================================
+    // STATE PER OPTION
+    // =============================================
+    const state = {
+      a: { goals: [], health: [], revealed: false },
+      b: { goals: [], health: [], revealed: false },
+      d: { goals: [], health: [], revealed: false }
+    };
+
+    // =============================================
+    // TOGGLE GOAL CARD
+    // =============================================
+    function toggleGoal(card, opt) {
+      const val = card.dataset.value;
+      const s = state[opt];
+
+      if (s.goals.includes(val)) {
+        s.goals = s.goals.filter(v => v !== val);
+        card.classList.remove('selected');
+
+        // If deselecting "improve-health", close sub-options & clear health
+        if (val === 'improve-health') {
+          s.health = [];
+          s.revealed = false;
+          closeHealthPanel(opt);
+        }
+      } else {
+        s.goals.push(val);
+        card.classList.add('selected');
+
+        // If selecting "improve-health", immediately reveal sub-options
+        if (val === 'improve-health') {
+          s.revealed = true;
+          openHealthPanel(opt);
+        }
+      }
+
+      updateStatus(opt, '');
+    }
+
+    // =============================================
+    // TOGGLE HEALTH SUB-OPTION
+    // =============================================
+    function toggleHealth(el, opt) {
+      const val = el.dataset.health;
+      const s = state[opt];
+
+      if (s.health.includes(val)) {
+        s.health = s.health.filter(v => v !== val);
+        el.classList.remove('selected');
+      } else {
+        s.health.push(val);
+        el.classList.add('selected');
+      }
+    }
+
+    // =============================================
+    // HANDLE CONTINUE — reveal health or advance
+    // =============================================
+    function handleContinue(opt) {
+      const s = state[opt];
+
+      // Must have at least one goal
+      if (s.goals.length === 0) {
+        updateStatus(opt, 'Please select at least one goal');
+        return;
+      }
+
+      // If "improve-health" selected but no health concerns picked
+      if (s.goals.includes('improve-health') && s.health.length === 0) {
+        updateStatus(opt, 'Please select at least one health area');
+        return;
+      }
+
+      // Success
+      const healthMsg = s.health.length > 0 ? ` + ${s.health.join(', ')}` : '';
+      updateStatus(opt, `Done! Goals: ${s.goals.join(', ')}${healthMsg}`);
+    }
+
+    // =============================================
+    // OPEN / CLOSE HEALTH PANELS
+    // =============================================
+    function openHealthPanel(opt) {
+      if (opt === 'a') {
+        document.getElementById('accordion-a').classList.add('open');
+        document.querySelector('#grid-a .accordion-host').classList.add('expanded');
+      } else if (opt === 'b') {
+        document.getElementById('connected-b').classList.add('open');
+      } else if (opt === 'd') {
+        document.getElementById('chips-d').classList.add('open');
+      }
+    }
+
+    function closeHealthPanel(opt) {
+      if (opt === 'a') {
+        const panel = document.getElementById('accordion-a');
+        panel.classList.remove('open');
+        document.querySelector('#grid-a .accordion-host').classList.remove('expanded');
+        panel.querySelectorAll('.sub-card.selected').forEach(el => el.classList.remove('selected'));
+      } else if (opt === 'b') {
+        const panel = document.getElementById('connected-b');
+        panel.classList.remove('open');
+        panel.querySelectorAll('.connected-chip.selected').forEach(el => el.classList.remove('selected'));
+      } else if (opt === 'd') {
+        const panel = document.getElementById('chips-d');
+        panel.classList.remove('open');
+        panel.querySelectorAll('.chip-tag.selected').forEach(el => el.classList.remove('selected'));
+      }
+    }
+
+    // =============================================
+    // STATUS MESSAGE
+    // =============================================
+    function updateStatus(opt, msg) {
+      document.getElementById(`status-${opt}`).textContent = msg;
+    }
+
+    // =============================================
+    // RESET
+    // =============================================
+    function resetOption(opt) {
+      state[opt] = { goals: [], health: [], revealed: false };
+
+      // Deselect all goal cards
+      const grid = document.getElementById(`grid-${opt}`);
+      grid.querySelectorAll('.goal-card.selected').forEach(c => c.classList.remove('selected'));
+
+      // Close + deselect health
+      closeHealthPanel(opt);
+
+      updateStatus(opt, '');
+    }
+  </script>
+
+</body>
+</html>

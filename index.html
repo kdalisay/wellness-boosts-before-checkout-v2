@@ -8547,60 +8547,73 @@
     });
 
     // Wellness Boosts Data
+    // Each boost is tagged with the quiz signals it serves so the
+    // recommender can score & rank them per user.
+    //   - healthDomain: matches Goal → "Improve health" → sub-concern
+    //   - goals:        matches Goal selections directly
+    //   - bodyCondition: matches Step 7 (Body condition)
+    //   - activityLevel: matches Step 9 (Activity level)
+    //   - ageGroup:     derived from Step 4 (Age) — puppy <1yr, senior ≥7yr
+    //   - protein:      used to suppress boosts when allergen is selected
+    // Order matters: when scores tie (e.g., when only one signal matches strongly),
+    // the secondary slot fills from this list in order. Probiotic & Dental lead
+    // because they're the most broadly-relevant defaults.
     const wellnessBoostsData = [
+      {
+        id: 'probiotic-soft-chews',
+        name: 'Probiotic Soft Chews',
+        price: 23.50,
+        image: 'images/ba2876da-b8a5-4e26-bb43-958cb1c43dea.png',
+        tags: ['Gut Health', 'Vet-Formulated', 'Chicken Flavor'],
+        healthDomain: 'digestive',
+        goals: ['human-grade-food'],
+        bodyCondition: [],
+        activityLevel: [],
+        ageGroup: ['puppy'],
+        protein: 'chicken'
+      },
       {
         id: 'dental-sticks',
         name: 'Dental Sticks',
-        price: 9.99,
+        price: 19.99,
         image: 'images/ecb9699e-65e2-43fa-b3bd-dae18f44e347.png',
         tags: ['Dog Treats', 'Oral Health', 'Chicken Flavor'],
-        recommended: true,
-        healthDomain: 'dental'
-      },
-      {
-        id: 'probiotic-chews',
-        name: 'Probiotic Chews',
-        price: 9.99,
-        image: 'images/ba2876da-b8a5-4e26-bb43-958cb1c43dea.png',
-        tags: ['Dog Treats', 'Oral Health', 'Chicken Flavor'],
-        recommended: true,
-        healthDomain: 'dental'
+        healthDomain: 'dental',
+        // No 'improve-health' goal — healthDomain is the more specific signal,
+        // and adding 'improve-health' would inflate every health product equally.
+        goals: [],
+        bodyCondition: [],
+        activityLevel: [],
+        ageGroup: [],
+        protein: 'chicken'
       },
       {
         id: 'hip-joint-soft-chews',
         name: 'Hip & Joint Soft Chews, 60ct',
-        price: 9.99,
+        price: 25.00,
         image: 'images/e5c2df9e-9425-42f1-9df2-70e20f3dea04.png',
         tags: ['Hip & Joint', 'Vet-Formulated'],
-        recommended: false,
-        healthDomain: 'joint'
-      },
-      {
-        id: 'probiotic-soft-chews',
-        name: 'Probiotic Soft Chews, 60 ct',
-        price: 9.99,
-        image: 'images/ba2876da-b8a5-4e26-bb43-958cb1c43dea.png',
-        tags: ['Gut Health', 'Vet-Formulated'],
-        recommended: false,
-        healthDomain: 'digestive'
+        healthDomain: 'joint',
+        goals: [],
+        bodyCondition: [],
+        activityLevel: ['high'],
+        ageGroup: ['senior'],
+        protein: null
       },
       {
         id: '8-in-1-wellness-chews',
         name: '8-in-1 Wellness Soft Chews, 50ct',
-        price: 9.99,
-        image: 'images/f0566316-aec8-4c70-a764-9eec96f51418.png',
+        price: 22.00,
+        // Using probiotic jar art as a placeholder — the dedicated 8-in-1
+        // asset isn't in /images. Same product family (NASC supplement chews).
+        image: 'images/ba2876da-b8a5-4e26-bb43-958cb1c43dea.png',
         tags: ['Heart Health', 'Immunity', 'Vet-Formulated'],
-        recommended: false,
-        healthDomain: 'immunity'
-      },
-      {
-        id: 'dental-sticks-extra',
-        name: 'Dental Sticks',
-        price: 9.99,
-        image: 'images/ecb9699e-65e2-43fa-b3bd-dae18f44e347.png',
-        tags: ['Dog Treats', 'Oral Health', 'Chicken Flavor'],
-        recommended: false,
-        healthDomain: 'dental'
+        healthDomain: 'immunity',
+        goals: ['convenient-feeding', 'human-grade-food'],
+        bodyCondition: [],
+        activityLevel: [],
+        ageGroup: ['senior'],
+        protein: null
       },
       {
         id: 'chicken-lite-bites',
@@ -8608,19 +8621,44 @@
         price: 9.99,
         image: 'images/9ef6abc0-3dc9-4d06-9dd9-8e90d8a7cbd2.png',
         tags: ['Grain-Free', 'For Training', '>90% Chicken'],
-        recommended: false,
-        healthDomain: null
+        healthDomain: null,
+        goals: ['affordability', 'variety'],
+        // Form uses weight-goal values: 'gain-weight' | 'maintain-weight' | 'reduce-weight'
+        bodyCondition: ['reduce-weight'],
+        activityLevel: [],
+        ageGroup: [],
+        protein: 'chicken'
+      },
+      {
+        id: 'belly-bites-beef',
+        name: 'Belly Bites Beef Dog Treats',
+        price: 9.99,
+        image: 'images/c53e3025-d9d5-4e12-86e4-2a97ae7a8101.png',
+        tags: ['Gut Health', 'Grain-Free', 'For Training'],
+        healthDomain: null,
+        goals: ['picky-eater', 'variety', 'affordability'],
+        bodyCondition: [],
+        activityLevel: [],
+        ageGroup: [],
+        protein: 'beef'
       },
       {
         id: 'lamb-snack-sticks',
         name: 'Lamb Snack Sticks Dog Treats',
-        price: 9.99,
+        price: 13.99,
         image: 'images/5ada325d-9605-4896-b34e-b6a7fadcd578.png',
         tags: ['Limited Ingredients', 'Grain-Inclusive'],
-        recommended: false,
-        healthDomain: null
+        healthDomain: null,
+        goals: ['picky-eater', 'variety'],
+        bodyCondition: [],
+        activityLevel: [],
+        ageGroup: [],
+        protein: 'lamb'
       }
     ];
+
+    // Max number of cards shown above the "See more" toggle.
+    const MAX_RECOMMENDED_BOOSTS = 2;
 
     let selectedBoosts = [];
     let showingAllBoosts = false;
@@ -9268,13 +9306,47 @@
       const extraGrid = document.getElementById('wellness-boosts-extra-grid');
       const toggleBtn = document.getElementById('wellness-toggle-btn');
 
-      // Use health concerns to drive recommendations, fallback to static flag
-      const healthConcerns = quizState.formData.healthConcerns || [];
-      const hasHealthConcerns = healthConcerns.length > 0;
-      const recommended = hasHealthConcerns
-        ? wellnessBoostsData.filter(b => b.healthDomain && healthConcerns.includes(b.healthDomain))
-        : wellnessBoostsData.filter(b => b.recommended);
-      const extra = wellnessBoostsData.filter(b => !recommended.includes(b));
+      // Score each boost against the user's quiz signals.
+      // Health concern is the strongest signal (direct 1:1 product map).
+      // Goals come next, then body / activity / age modifiers.
+      // Allergens hard-suppress any boost with a matching protein.
+      const formData = quizState.formData;
+      const goalsArr = Array.isArray(formData.goals)
+        ? formData.goals
+        : (formData.goals ? [formData.goals] : []);
+      const healthConcerns = formData.healthConcerns || [];
+      const bodyCondition = formData.bodyCondition;
+      const activityLevel = formData.activityLevel;
+      const allergens = formData.allergens || [];
+      const ageYears = parseInt(formData.ageYears, 10);
+      const ageGroup = Number.isNaN(ageYears)
+        ? null
+        : (ageYears >= 7 ? 'senior' : (ageYears < 1 ? 'puppy' : 'adult'));
+
+      const allowedBoosts = wellnessBoostsData.filter(
+        b => !b.protein || !allergens.includes(b.protein)
+      );
+
+      const scored = allowedBoosts.map(boost => {
+        let score = 0;
+        if (boost.healthDomain && healthConcerns.includes(boost.healthDomain)) score += 4;
+        boost.goals.forEach(g => { if (goalsArr.includes(g)) score += 3; });
+        if (boost.bodyCondition.includes(bodyCondition)) score += 2;
+        if (boost.activityLevel.includes(activityLevel)) score += 2;
+        if (boost.ageGroup.includes(ageGroup)) score += 1;
+        return { boost, score };
+      });
+
+      scored.sort((a, b) => b.score - a.score);
+
+      // Always fill MAX_RECOMMENDED_BOOSTS slots: matched picks first, then the
+      // top of the remaining list as a sensible secondary recommendation.
+      // This keeps the hero row visually consistent (matches the 2-card layout)
+      // even when only one boost is a strong signal match.
+      const recommended = scored
+        .slice(0, MAX_RECOMMENDED_BOOSTS)
+        .map(s => s.boost);
+      const extra = allowedBoosts.filter(b => !recommended.includes(b));
 
       // Always render recommended cards in the top grid
       recommendedGrid.innerHTML = recommended.map(renderBoostCard).join('');

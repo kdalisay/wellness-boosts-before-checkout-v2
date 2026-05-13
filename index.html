@@ -496,6 +496,63 @@
       margin-bottom: 0;
     }
 
+    /* Smooth staggered reveal when health-concerns-section becomes visible.
+       Easing is "ease-out-expo" — gentle, decelerating settle. */
+    .health-concerns-section:not(.hidden) {
+      animation: healthSectionReveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .health-concerns-section:not(.hidden) .goals-divider {
+      transform-origin: left center;
+      animation: healthDividerExpand 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: 0.05s;
+    }
+
+    .health-concerns-section:not(.hidden) .health-concerns-heading,
+    .health-concerns-section:not(.hidden) .step-subtitle {
+      animation: healthTextRise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .health-concerns-section:not(.hidden) .health-concerns-heading { animation-delay: 0.12s; }
+    .health-concerns-section:not(.hidden) .step-subtitle           { animation-delay: 0.18s; }
+
+    .health-concerns-section:not(.hidden) [data-step-form="health-concerns"] .radio-size-card {
+      animation: healthCardRise 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .health-concerns-section:not(.hidden) [data-step-form="health-concerns"] .radio-size-card:nth-child(1) { animation-delay: 0.22s; }
+    .health-concerns-section:not(.hidden) [data-step-form="health-concerns"] .radio-size-card:nth-child(2) { animation-delay: 0.30s; }
+    .health-concerns-section:not(.hidden) [data-step-form="health-concerns"] .radio-size-card:nth-child(3) { animation-delay: 0.38s; }
+    .health-concerns-section:not(.hidden) [data-step-form="health-concerns"] .radio-size-card:nth-child(4) { animation-delay: 0.46s; }
+
+    @keyframes healthSectionReveal {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes healthDividerExpand {
+      from { opacity: 0; transform: scaleX(0); }
+      to   { opacity: 1; transform: scaleX(1); }
+    }
+
+    @keyframes healthTextRise {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes healthCardRise {
+      from { opacity: 0; transform: translateY(14px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0)   scale(1); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .health-concerns-section:not(.hidden),
+      .health-concerns-section:not(.hidden) .goals-divider,
+      .health-concerns-section:not(.hidden) .health-concerns-heading,
+      .health-concerns-section:not(.hidden) .step-subtitle,
+      .health-concerns-section:not(.hidden) [data-step-form="health-concerns"] .radio-size-card {
+        animation: none;
+      }
+    }
+
     /* =============================================
        SETTINGS PANEL
        ============================================= */
